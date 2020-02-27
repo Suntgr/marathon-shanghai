@@ -18,13 +18,14 @@ Vue.prototype.$utils = $utils
 Vue.prototype.$auth = $auth
 Vue.prototype.$document = $document
 
-for (let key in Filters) {
+for (const key in Filters) {
   Vue.filter(key, Filters[key])
 }
 
 /* ------------------------Vue Global Components------------------------------ */
-import ElementUI from 'element-ui'
-Vue.use(ElementUI)
+// import ElementUI from 'element-ui'
+// import locale from 'element-ui/lib/locale/lang/en'
+// Vue.use(ElementUI, { locale })
 
 import Markdown from '@components/markdown/Index'
 Vue.component('Markdown', Markdown)

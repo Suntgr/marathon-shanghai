@@ -18,62 +18,31 @@
   }
 }
 
-// （Responsive image）Keep images from scaling beyond the width of their parents.
-@mixin img-responsive($display: block) {
-  display: $display;
-  max-width: 100%;
-  height: auto;
-}
-
-// Resize anything
-@mixin resizable($direction) {
-  resize: $direction;
-  overflow: auto;
-}
-
-// Text overflow
-// Requires inline-block or block for proper styling
-@mixin text-overflow() {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-// Center-align a block level element
-@mixin center-block() {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-@mixin absolute-center() {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-@mixin fixed-center() {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-@mixin flex-box-center($direction: row, $justify: center, $align-items: center) {
-  flex-direction: $direction;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -webkit-flex;
-  display: -ms-flex;
+// flex center
+@mixin center-flex($direction: both) {
   display: flex;
-  -webkit-box-align: center;
-  -moz-box-align: center;
-  -ms-box-align: center;
-  -webkit-align-items: $align-items;
-  -ms-align-items: $align-items;
-  align-items: $align-items;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  justify-content: $justify;
+  @if $direction == both {
+    justify-content: center;
+    align-items: center;
+  } @else if $direction == x {
+    justify-content: center;
+  } @else if $direction == y {
+    align-items: center;
+  }
+}
+
+// translate center
+@mixin center-translate($direction: both) {
+  position: absolute;
+  @if $direction == both {
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+  } @else if $direction == x {
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+  } @else if $direction == y {
+    top: 50%;
+    transform: translate3d(0, -50%, 0);
+  }
 }

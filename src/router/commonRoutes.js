@@ -8,18 +8,18 @@
 import NotFound from '@pages/partials/NotFound'
 
 export default [
-  {
-    path: '/',
-    meta: {
-      title: 'Vue-cli Overall Example',
-      ignoreAuth: true
-    },
-    component: resolve => require(['@pages/Homepage'], resolve)
-  },
-  {
-    path: '/',
-    redirect: '/homepage'
-  },
+  // {
+  //   path: '/',
+  //   meta: {
+  //     title: 'Vue-cli Overall Example',
+  //     ignoreAuth: true
+  //   },
+  //   component: resolve => require(['@pages/Homepage'], resolve)
+  // },
+  // {
+  //   path: '/',
+  //   redirect: '/homepage'
+  // },
   {
     path: '*',
     meta: {

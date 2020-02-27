@@ -17,10 +17,11 @@ export default {
 <style lang="scss">
 @import './assets/styles/style.scss';
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', STHeiti,
+    'Microsoft Yahei', Tahoma, Simsun, sans-serif;
+  font-size: 16px;
+  color: #333333;
+  width: 100%;
+  height: 100%;
 }
 </style>

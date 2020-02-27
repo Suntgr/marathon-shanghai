@@ -1,5 +1,5 @@
 /* 改变主题色变量 */
-$--color-primary: teal;
+$--color-primary: #d83838;
 
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
@@ -19,5 +19,23 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @media (max-width: 768px) {
   .el-collapse {
     max-width: 320px;
+  }
+}
+
+.el-button {
+  font-size: 16px;
+}
+.el-input__inner {
+  height: 42px;
+  line-height: 42px;
+}
+.el-button.blue-btn {
+  min-width: 90px;
+  color: #4a90e2;
+  border-color: #4a90e2;
+  &:hover {
+    background: #4a90e2;
+    color: #ffffff;
+    // background: rgba($color: #4a90e2, $alpha: 0.6);
   }
 }
