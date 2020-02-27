@@ -1,3 +1,10 @@
+/* eslint-disable prettier/prettier */
+/**
+ * /* eslint-disable no-unused-vars
+ *
+ * @format
+ */
+
 /** @format */
 
 const path = require('path')
@@ -128,14 +135,14 @@ module.exports = {
 
   configureWebpack: {
     plugins: [
-      isProductionEnvFlag && isOpenPrerenderSPA
-        ? new require('prerender-spa-plugin')({
-            // Required - The path to the webpack-outputted app to prerender.
-            staticDir: path.join(__dirname, 'dist'),
-            // Required - Routes to render.
-            routes: ['/', '/explore']
-          })
-        : () => {},
+      isProductionEnvFlag && isOpenPrerenderSPA ?
+      new require('prerender-spa-plugin')({
+        // Required - The path to the webpack-outputted app to prerender.
+        staticDir: path.join(__dirname, 'dist'),
+        // Required - Routes to render.
+        routes: ['/', '/explore']
+      }) :
+      () => {},
       isProductionEnvFlag ? new SizePlugin() : () => {}
     ]
   },
@@ -178,6 +185,7 @@ module.exports = {
     hotOnly: false,
     // See https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#configuring-proxy
     proxy: null, // string | Object
+    // eslint-disable-next-line no-unused-vars
     before: app => {}
   },
 

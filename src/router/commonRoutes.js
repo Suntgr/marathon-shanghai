@@ -1,14 +1,12 @@
+/* eslint-disable prettier/prettier */
 /**
  * /*
  * 通用路由配置，需要放在配置项数组的末端
  *
  * @format
  */
-
 import NotFound from '@pages/partials/NotFound'
-
-export default [
-  {
+export default [{
     path: '/',
     meta: {
       title: 'Vue-cli Overall Example',
@@ -21,7 +19,7 @@ export default [
     redirect: '/homepage'
   },
   {
-    path: '*',
+    path: '/',
     meta: {
       title: 'Page Not Found',
       ignoreAuth: true
