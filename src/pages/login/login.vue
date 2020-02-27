@@ -2,20 +2,30 @@
   <div class="login">
     <div class="banner">
       <img class="logo" src="../../assets/images/logo.png" />
-      <div class="main">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="main">
         <p class="welcome">{{ $t('login.welcome') }}</p>
-        <el-input class="input-box" v-model="account" :placeholder="$t('login.account')"></el-input>
-        <el-input
-          class="input-box"
-          v-model="password"
-          :placeholder="$t('login.password')"
-        ></el-input>
+        <el-form-item prop="account">
+          <el-input
+            class="input-box"
+            v-model.trim="ruleForm.account"
+            :placeholder="$t('login.account')"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            class="input-box"
+            v-model.trim="ruleForm.password"
+            :placeholder="$t('login.password')"
+          ></el-input>
+        </el-form-item>
         <div class="submit-btn">
-          <el-button type="primary">{{ $t('login.login') }}</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">{{
+            $t('login.login')
+          }}</el-button>
           <el-button round @click="signUp">{{ $t('login.sign') }}</el-button>
         </div>
         <p class="forgot-btn">{{ $t('login.forgot') }}</p>
-      </div>
+      </el-form>
     </div>
     <footer-lang @reset="resetValue"></footer-lang>
   </div>
@@ -26,9 +36,44 @@ import FooterLang from '@components/footer.vue'
 export default {
   components: { FooterLang },
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('login.placeholderPassword')))
+      } else {
+        callback()
+      }
+    }
+    const validateAccount = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('login.errAccount')))
+        return
+      }
+      if (value.indexOf('@') > 0) {
+        const isEmail = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/.test(
+          value
+        )
+        if (!isEmail) {
+          callback(new Error(this.$t('login.errEmail')))
+          return
+        }
+      } else {
+        const isPhone = /^1[3456789]\d{9}$/.test(value)
+        if (!isPhone) {
+          callback(new Error(this.$t('login.errPhone')))
+          return
+        }
+      }
+      callback()
+    }
     return {
-      account: '',
-      password: ''
+      ruleForm: {
+        account: '',
+        password: ''
+      },
+      rules: {
+        account: [{ validator: validateAccount, trigger: 'blur' }],
+        password: [{ validator: validatePass, trigger: 'blur' }]
+      }
     }
   },
   computed: {},
@@ -41,6 +86,16 @@ export default {
     },
     signUp() {
       this.$router.push('sign')
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          alert('submit!')
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
   }
 }
@@ -92,6 +147,9 @@ export default {
     }
     .input-box {
       margin-top: 45px;
+      &.el-input {
+        font-size: 16px;
+      }
       .el-input__inner {
         width: 400px;
         color: #ffffff;

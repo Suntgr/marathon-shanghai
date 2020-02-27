@@ -1,32 +1,94 @@
 <template>
-  <div class="userinfo-content step2" :class="$i18n.locale">
+  <el-form
+    :model="ruleForm"
+    :rules="rules"
+    ref="ruleForm"
+    class="userinfo-content step2"
+    :class="$i18n.locale"
+  >
     <div class="sign-title">{{ $t('login.step2Title') }}</div>
-    <el-input :placeholder="$t('login.placeholderNickname')">
-      <span slot="prefix">{{ $t('login.nickname') }}</span>
-    </el-input>
-    <el-input :placeholder="$t('login.placeholderPassword')">
-      <span slot="prefix">{{ $t('login.password') }}</span>
-    </el-input>
+    <el-form-item prop="nickname">
+      <el-input v-model.trim="ruleForm.nickname" :placeholder="$t('login.placeholderNickname')">
+        <span slot="prefix">{{ $t('login.nickname') }}</span>
+      </el-input>
+    </el-form-item>
+    <el-form-item prop="pass">
+      <el-input v-model.trim="ruleForm.pass" :placeholder="$t('login.placeholderPassword')">
+        <span slot="prefix">{{ $t('login.password') }}</span>
+      </el-input>
+    </el-form-item>
     <p class="password-rule">{{ $t('login.passwordRule') }}</p>
-    <el-input :placeholder="$t('login.placeholderPasswordAgain')">
-      <span slot="prefix">{{ $t('login.password') }}</span>
-    </el-input>
-    <el-button class="next-btn" type="primary" @click="nextStep">{{ $t('login.next') }}</el-button>
-  </div>
+    <el-form-item prop="checkPass">
+      <el-input
+        v-model.trim="ruleForm.checkPass"
+        :placeholder="$t('login.placeholderPasswordAgain')"
+      >
+        <span slot="prefix">{{ $t('login.password') }}</span>
+      </el-input>
+    </el-form-item>
+    <el-button class="next-btn" type="primary" @click="submitForm('ruleForm')">{{
+      $t('login.next')
+    }}</el-button>
+  </el-form>
 </template>
 
 <script>
 export default {
   components: {},
   data() {
-    return {}
+    const validateNickname = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('login.placeholderNickname')))
+      } else {
+        callback()
+      }
+    }
+    const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('login.placeholderPassword')))
+      } else {
+        if (this.ruleForm.checkPass !== '') {
+          this.$refs.ruleForm.validateField('checkPass')
+        }
+        callback()
+      }
+    }
+    const validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('login.noCheckPass')))
+      } else if (value !== this.ruleForm.pass) {
+        callback(new Error(this.$t('login.errorCheckPass')))
+      } else {
+        callback()
+      }
+    }
+    return {
+      ruleForm: {
+        nickname: '',
+        pass: '',
+        checkPass: ''
+      },
+      rules: {
+        nickname: [{ validator: validateNickname, trigger: 'blur' }],
+        pass: [{ validator: validatePass, trigger: 'blur' }],
+        checkPass: [{ validator: validatePass2, trigger: 'blur' }]
+      }
+    }
   },
   computed: {},
   created() {},
   mounted() {},
   methods: {
-    nextStep() {
-      this.$emit('next')
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$emit('next')
+        } else {
+          this.$emit('next')
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
   }
 }
@@ -57,7 +119,7 @@ export default {
   }
   .password-rule {
     font-size: 12px;
-    margin-top: 15px;
+    margin-top: 18px;
   }
 }
 </style>

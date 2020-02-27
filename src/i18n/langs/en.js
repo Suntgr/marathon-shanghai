@@ -4,6 +4,9 @@ const en = {
   login: {
     welcome: 'Welcome to login！',
     account: 'Email / Mobile Number',
+    errAccount: 'Please enter your email / mobile number',
+    errEmail: 'Incorrect email account',
+    errPhone: 'Wrong phone number',
     password: 'Password',
     login: 'Log In',
     sign: 'Sign Up',
@@ -64,7 +67,11 @@ const en = {
       '* Note: The above are the necessary conditions for registration. You cannot modify it after confirming the information (please be true)',
     wait: 'Improve information later',
     signOk: 'Congratulations on your successful registration!',
-    okTip: 'Automatically jump after 3 seconds ...'
+    okTip: 'Automatically jump after 3 seconds ...',
+    errorNoCode: 'please enter verification code',
+    errorCode: 'Code is incorrect',
+    noCheckPass: 'Please enter the password again',
+    errorCheckPass: 'Incorrect password entered twice'
   }
 }
 

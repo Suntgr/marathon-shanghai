@@ -1,46 +1,102 @@
 <template>
-  <div class="userinfo-content">
+  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="userinfo-content">
     <div class="sign-title">{{ $t('login.step1Title') }}</div>
-    <el-input :placeholder="placeholderWay" :class="{ 'mini-prefix': !waySwitch }">
-      <span slot="prefix">{{ prefixText }}</span>
-    </el-input>
-    <div v-if="waySwitch" class="change-way" @click="waySwitch = !waySwitch">
+    <el-form-item prop="phoneOrEmail">
+      <el-input
+        v-model.trim="ruleForm.phoneOrEmail"
+        :placeholder="placeholderWay"
+        :class="{ 'mini-prefix': !waySwitch }"
+      >
+        <span slot="prefix">{{ prefixText }}</span>
+      </el-input>
+    </el-form-item>
+
+    <div v-if="waySwitch" class="change-way">
       <span>{{ $t('login.use') }}</span>
-      <a class="switch-btn">{{ $t('login.emailSign') }}</a>
+      <a class="switch-btn" @click="waySwitch = !waySwitch">{{ $t('login.emailSign') }}</a>
     </div>
     <div v-else class="change-way" @click="waySwitch = !waySwitch">
       <span>{{ $t('login.use') }}</span>
       <a class="switch-btn">{{ $t('login.phoneSign') }}</a>
     </div>
-    <div class="code-box">
-      <el-input :placeholder="$t('login.usePic')"></el-input>
-      <div class="change-img-code">
-        <img class="code-pic" src="http://img.la/100x40" />
-        <span>{{ $t('login.change') }}</span>
+    <el-form-item prop="imgCode">
+      <div class="code-box">
+        <el-input v-model.trim="ruleForm.imgCode" :placeholder="$t('login.usePic')"></el-input>
+        <div class="change-img-code">
+          <img class="code-pic" src="http://img.la/100x40" />
+          <span>{{ $t('login.change') }}</span>
+        </div>
       </div>
-    </div>
-    <div class="code-box">
-      <el-input :placeholder="placeholderCode"></el-input>
-      <div class="change-img-code">
-        <el-button class="blue-btn">{{ $t('login.getCode') }}</el-button>
+    </el-form-item>
+    <el-form-item prop="msgCode">
+      <div class="code-box">
+        <el-input v-model.trim="ruleForm.msgCode" :placeholder="placeholderCode"></el-input>
+        <div class="change-img-code">
+          <el-button class="blue-btn">{{ $t('login.getCode') }}</el-button>
+        </div>
       </div>
-    </div>
+    </el-form-item>
     <div class="agreement-switch">
       <el-checkbox></el-checkbox>
       <span class="btn-describe"
         >{{ $t('login.agree') }}<a>{{ $t('login.agreement') }}</a></span
       >
     </div>
-    <el-button class="next-btn" type="primary" @click="nextStep">{{ $t('login.next') }}</el-button>
-  </div>
+    <el-button class="next-btn" type="primary" @click="submitForm('ruleForm')">{{
+      $t('login.next')
+    }}</el-button>
+  </el-form>
 </template>
 
 <script>
 export default {
   components: {},
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (!this.waySwitch) {
+        if (value === '') {
+          callback(new Error(this.$t('login.placeholderEmail')))
+          return
+        }
+        const isEmail = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/.test(
+          value
+        )
+        if (!isEmail) {
+          callback(new Error(this.$t('login.errEmail')))
+          return
+        }
+      } else {
+        if (value === '') {
+          callback(new Error(this.$t('login.placeholderPhone')))
+          return
+        }
+        const isPhone = /^1[3456789]\d{9}$/.test(value)
+        if (!isPhone) {
+          callback(new Error(this.$t('login.errPhone')))
+          return
+        }
+      }
+      callback()
+    }
+    const validatePassCode = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('login.errorNoCode')))
+        return
+      }
+      callback()
+    }
     return {
-      waySwitch: true
+      waySwitch: true,
+      ruleForm: {
+        phoneOrEmail: '',
+        imgCode: '',
+        msgCode: ''
+      },
+      rules: {
+        phoneOrEmail: [{ validator: validatePass, trigger: 'blur' }],
+        imgCode: [{ validator: validatePassCode, trigger: 'blur' }],
+        msgCode: [{ validator: validatePassCode, trigger: 'blur' }]
+      }
     }
   },
   computed: {
@@ -57,8 +113,16 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    nextStep() {
-      this.$emit('next')
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$emit('next')
+        } else {
+          this.$emit('next')
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
   }
 }

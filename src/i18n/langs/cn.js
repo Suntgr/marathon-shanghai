@@ -4,6 +4,9 @@ const cn = {
   login: {
     welcome: '欢迎登录！',
     account: '邮箱/手机号',
+    errAccount: '请输入邮箱/手机号',
+    errEmail: '邮箱账号有误',
+    errPhone: '手机号码有误',
     password: '密码',
     login: '登录',
     sign: '立即注册',
@@ -62,7 +65,11 @@ const cn = {
     note: '*注: 以上是报名必须条件,确认信息后将不能修改(请务必真实)',
     wait: '稍后完善资料',
     signOk: '恭喜你注册成功！',
-    okTip: '3秒后自动跳转...'
+    okTip: '3秒后自动跳转...',
+    errorNoCode: '请输入验证码',
+    errorCode: '验证码有误',
+    noCheckPass: '请再次输入密码',
+    errorCheckPass: '两次输入密码不一致'
   }
 }
 

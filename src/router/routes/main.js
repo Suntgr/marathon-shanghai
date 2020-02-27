@@ -15,7 +15,7 @@ export default [
     name: 'sign',
     meta: {
       ignoreAuth: true,
-      title: 'sign'
+      title: '注册'
     },
     component: () => import('@pages/login/sign.vue')
   }
