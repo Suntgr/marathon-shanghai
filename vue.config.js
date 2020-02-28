@@ -1,3 +1,10 @@
+/* eslint-disable prettier/prettier */
+/**
+ * /* eslint-disable no-unused-vars
+ *
+ * @format
+ */
+
 /** @format */
 
 const path = require('path')
@@ -178,6 +185,7 @@ module.exports = {
     hotOnly: false,
     // See https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#configuring-proxy
     proxy: null, // string | Object
+    // eslint-disable-next-line no-unused-vars
     before: app => {}
   },
 
