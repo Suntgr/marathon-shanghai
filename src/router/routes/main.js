@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 /** @format */
 // eslint-disable-next-line prettier/prettier
-export default [{
+export default [
+  {
     path: '/explore',
     meta: {
       ignoreAuth: true,
@@ -25,6 +26,5 @@ export default [{
       title: '发现更多'
     },
     component: resolve => require(['@pages/Dashboard'], resolve)
-  },
-
+  }
 ]

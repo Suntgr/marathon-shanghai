@@ -6,7 +6,8 @@
  * @format
  */
 import NotFound from '@pages/partials/NotFound'
-export default [{
+export default [
+  {
     path: '/',
     meta: {
       title: 'Vue-cli Overall Example',

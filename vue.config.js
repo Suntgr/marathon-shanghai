@@ -135,14 +135,14 @@ module.exports = {
 
   configureWebpack: {
     plugins: [
-      isProductionEnvFlag && isOpenPrerenderSPA ?
-      new require('prerender-spa-plugin')({
-        // Required - The path to the webpack-outputted app to prerender.
-        staticDir: path.join(__dirname, 'dist'),
-        // Required - Routes to render.
-        routes: ['/', '/explore']
-      }) :
-      () => {},
+      isProductionEnvFlag && isOpenPrerenderSPA
+        ? new require('prerender-spa-plugin')({
+            // Required - The path to the webpack-outputted app to prerender.
+            staticDir: path.join(__dirname, 'dist'),
+            // Required - Routes to render.
+            routes: ['/', '/explore']
+          })
+        : () => {},
       isProductionEnvFlag ? new SizePlugin() : () => {}
     ]
   },
