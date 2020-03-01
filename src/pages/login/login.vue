@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import FooterLang from '@components/footer.vue'
+import FooterLang from '@components/FooterLang.vue'
 export default {
   components: { FooterLang },
   data() {

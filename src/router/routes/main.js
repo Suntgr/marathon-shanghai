@@ -20,6 +20,15 @@ export default [
     },
     component: () => import('@pages/login/sign.vue')
   },
+  {
+    path: '/user',
+    name: 'user',
+    meta: {
+      ignoreAuth: true,
+      title: '个人中心'
+    },
+    component: () => import('@pages/user/user.vue')
+  },
   // 国际官网
   {
     path: '/inter',

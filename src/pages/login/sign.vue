@@ -33,7 +33,7 @@ import Step1 from '@components/signUp/step1.vue'
 import Step2 from '@components/signUp/step2.vue'
 import Step3 from '@components/signUp/step3.vue'
 import Step4 from '@components/signUp/step4.vue'
-import FooterLang from '@components/footer.vue'
+import FooterLang from '@components/FooterLang.vue'
 export default {
   components: { FooterLang, Step1, Step2, Step3, Step4 },
   data() {

@@ -69,7 +69,56 @@ const cn = {
     errorNoCode: '请输入验证码',
     errorCode: '验证码有误',
     noCheckPass: '请再次输入密码',
-    errorCheckPass: '两次输入密码不一致'
+    errorCheckPass: '两次输入密码不一致',
+    cert: '证件',
+    pinyin: '姓名全拼',
+    emergencyName: '紧急联系人',
+    signature: '电子签名',
+    applyDate: '报名日期'
+  },
+  header: {
+    welcome: '欢迎访问上海马拉松官网',
+    myMarathon: '我的上马',
+    out: '退出'
+  },
+  footer: {
+    instructions:
+      '上海国际马拉松赛、上马系列赛、上马俱乐部由上海东浩兰生赛事管理有限公司独家运营承办。',
+    phone: '咨询电话',
+    wechat: '上马公众号',
+    app: '上马手机版'
+  },
+  user: {
+    homePage: '首页',
+    game: '我的比赛',
+    results: '我的成绩',
+    apply: '我的报名',
+    certificate: '我的证书',
+    photo: '我的照片',
+    account: '账户管理',
+    info: '个人信息',
+    integral: '我的积分',
+    safe: '账户安全',
+    phone: '绑定手机',
+    email: '绑定邮箱',
+    tableEvent: '赛事',
+    tableProject: '项目',
+    tableResults: '抽签结果',
+    tableStatus: '支付状态',
+    tableNumber: '参赛号',
+    tableAction: '操作',
+    tableScore: '比赛成绩',
+    tableRanking: '总排名',
+    mileage: '公里点',
+    consuming: '分段计时',
+    details: '详情',
+    scoreDetails: '成绩详情',
+    scoreTimeA: '比赛成绩（净计时）',
+    socreTimeB: '分段成绩（净计时）',
+    projiect: '参赛项目',
+    target: '中签状态',
+    bus: '存衣车号',
+    pay: '立即支付'
   }
 }
 
