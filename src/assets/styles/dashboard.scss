@@ -78,7 +78,7 @@
   line-height: 40px;
   font-size: 14px;
 
-  >span {
+  > span {
     padding-right: 15px;
     padding-left: 15px;
     border-right: 1px solid #fff;
@@ -93,7 +93,7 @@
   padding-top: 5px;
   padding-left: 15px;
 
-  >.img1 {
+  > .img1 {
     width: 20px;
     height: 20px;
     margin-right: 10px;
@@ -184,7 +184,6 @@
   min-width: 1150px;
   overflow: hidden;
 
-
   .xinwen {
     width: 100%;
 
@@ -196,13 +195,12 @@
     .fl {
       font-size: 26px;
       color: #141414;
-      border-bottom: 2px solid #C71C30;
-
+      border-bottom: 2px solid #c71c30;
     }
 
     .fr {
       font-size: 12px;
-      color: #ADADAD;
+      color: #adadad;
     }
 
     .x_img {
@@ -217,7 +215,6 @@
     width: 100%;
     overflow: hidden;
 
-
     .x_text {
       overflow: hidden;
       padding-bottom: 25px;
@@ -225,15 +222,13 @@
       .fl {
         font-size: 26px;
         color: #141414;
-        border-bottom: 2px solid #C71C30;
-
+        border-bottom: 2px solid #c71c30;
       }
 
       .fr {
         font-size: 12px;
-        color: #ADADAD;
+        color: #adadad;
       }
-
     }
 
     .x_content {
@@ -254,7 +249,7 @@
               margin-right: 100px;
             }
 
-            >div:nth-child(2) {
+            > div:nth-child(2) {
               text-align: left;
               width: 300px;
               font-size: 14px;
@@ -264,17 +259,15 @@
               white-space: nowrap;
               height: 30px;
               line-height: 30px;
-
             }
 
             div:nth-child(3) {
               text-align: left;
               width: 300px;
               font-size: 12px;
-              color: #7E7E7E;
+              color: #7e7e7e;
               height: 20px;
               line-height: 20px;
-
             }
           }
         }
@@ -287,7 +280,6 @@
   width: 100%;
   position: relative;
   padding-top: 93px;
-
 
   img {
     width: 100%;
@@ -314,7 +306,7 @@
     width: 70%;
     height: 300px;
     float: right;
-    background: #F4F4F4;
+    background: #f4f4f4;
   }
 
   .run_lunbo {
@@ -328,14 +320,11 @@
       width: 100%;
       height: auto;
       display: block;
-
     }
 
     .imgcenter {
       padding-top: 50px;
     }
-
-
   }
 }
 
@@ -349,7 +338,7 @@
     width: 80%;
     height: 300px;
     float: left;
-    background: #F4F4F4;
+    background: #f4f4f4;
   }
 
   .run_img {
@@ -362,13 +351,10 @@
       width: 100%;
       height: auto;
       display: block;
-
     }
 
     .down {
       margin-top: 100px;
-
-
     }
 
     .img_div {
@@ -383,12 +369,10 @@
         background: rgba(172, 36, 36, 0.6);
         color: #ffffff;
         opacity: 0;
-
       }
 
       .mask {
         padding-top: 15%;
-
       }
 
       .mask h3,
@@ -400,7 +384,6 @@
     .img_div a:hover .mask {
       opacity: 1;
     }
-
   }
 }
 
@@ -418,7 +401,7 @@
     text-align: center;
     display: table-cell;
     vertical-align: middle;
-    background: #AC2424;
+    background: #ac2424;
     color: #fff;
   }
 }
