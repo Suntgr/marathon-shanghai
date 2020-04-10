@@ -1,6 +1,6 @@
 <template>
   <div class="apply">
-    <el-table :data="tableData" empty-text="--">
+    <el-table :data="gameList" empty-text="--">
       <el-table-column :label="$t('user.tableEvent')" width="274px" fixed prop="event">
       </el-table-column>
       <el-table-column :label="$t('user.tableProject')" prop="project"></el-table-column>
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {},
   data() {
@@ -46,29 +47,19 @@ export default {
           results: '中签',
           status: '已支付',
           number: '--'
-        },
-        {
-          event: '2019年上海国际半程马拉松赛',
-          project: '男子半程马拉松',
-          results: '未中签',
-          status: '已支付',
-          number: 'GB39230'
-        },
-        {
-          event: '2019年上海国际半程马拉松赛',
-          project: '男子半程马拉松',
-          results: '中签',
-          status: '未支付',
-          number: 'GB39230'
         }
       ]
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters('game', ['gameList'])
+  },
   created() {},
   mounted() {},
   methods: {
+    ...mapActions('game', ['getApplyDetails']),
     handleDetails(row) {
+      this.getApplyDetails({ sign_id: row.id })
       this.$emit('details', row)
     }
   }

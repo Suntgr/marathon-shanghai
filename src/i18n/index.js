@@ -4,10 +4,8 @@ import VueI18n from 'vue-i18n'
 import messages from './langs'
 
 Vue.use(VueI18n)
-const i18n = new VueI18n({
-  locale: localStorage.getItem('lang') || 'cn',
-  messages
-})
+const locale = localStorage.getItem('lang') || 'zh-CN'
+const i18n = new VueI18n({ locale, messages })
 Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
 })

@@ -8,7 +8,7 @@
       <el-table-column :label="$t('user.tableScore')" prop="score">
         <template slot-scope="scope">
           <span style="color: #CA3C3C">{{ scope.row.score }}</span>
-          <span class="btn" @click="open">{{ $t('user.details') }}</span>
+          <span class="btn" @click="open(scope.row.id)">{{ $t('user.details') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('user.tableRanking')" prop="ranking"></el-table-column>
@@ -43,15 +43,7 @@ export default {
   data() {
     return {
       headRowStyle: { background: '#FAFAFA', color: '#2C3E6E' },
-      tableData: [
-        {
-          event: '2019年上海国际半程马拉松赛',
-          project: '男子半程马拉松',
-          number: 'GB39230',
-          score: '03:23:09',
-          ranking: '88'
-        }
-      ],
+      tableData: null,
       scoreData: [
         { mileage: '5km', consuming: '03:23:47' },
         { mileage: '5km', consuming: '03:23:47' },
@@ -63,10 +55,25 @@ export default {
     }
   },
   computed: {},
-  created() {},
+  created() {
+    this.$apis.game.getScoreList({ page: 1, page_size: '100' }).then(({ data }) => {
+      data.list = [{}]
+      this.tableData = data.list.map(el => {
+        return {
+          event: el.activity_name || '2019年上海国际半程马拉松赛',
+          project: el.entry_name || '男子半程马拉松',
+          number: el.score_id || 'GB39230',
+          score: el.score || '03:23:09',
+          ranking: el.ranking || '88',
+          id: el.score_id || 1
+        }
+      })
+    })
+  },
   mounted() {},
   methods: {
-    open() {
+    open(id) {
+      this.$apis.game.getScoreDetails({ score_id: id })
       this.dialogTableVisible = true
     }
   }

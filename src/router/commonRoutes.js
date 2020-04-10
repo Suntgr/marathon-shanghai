@@ -16,10 +16,10 @@ export default [
   //   },
   //   component: resolve => require(['@pages/Homepage'], resolve)
   // },
-  // {
-  //   path: '/',
-  //   redirect: '/homepage'
-  // },
+  {
+    path: '/',
+    redirect: '/login'
+  },
   {
     path: '*',
     meta: {

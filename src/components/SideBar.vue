@@ -47,6 +47,9 @@ export default {
     setGroup() {
       this.group = [
         {
+          title: this.$t('header.myMarathon')
+        },
+        {
           title: this.$t('user.game'),
           menus: [
             this.$t('user.apply'),

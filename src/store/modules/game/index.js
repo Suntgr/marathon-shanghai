@@ -5,9 +5,14 @@ import mutations from './mutations'
 import actions from './actions'
 
 const state = {
-  defaultField: 1314
+  activityId: 1,
+  entryType: '',
+  applyList: null,
+  cert: null,
+  applyDetails: null,
+  photo: [],
+  activedPhoto: 0
 }
-
 export default {
   namespaced: true,
   state,

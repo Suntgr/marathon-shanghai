@@ -59,6 +59,8 @@ const cn = {
     female: '女',
     step4Title: '请输入紧急联系人',
     concern: '与参赛者关系',
+    concernList: ['父子', '父女', '母子', '母女', '夫妻', '兄妹', '姐妹', '朋友'],
+    idType: ['身份证', '军官证', '护照', '台胞证', '回乡证'],
     placeholder: '请选择',
     phone: '手机号',
     placeholderOtherPhone: '请输入紧急人手机号',
@@ -72,9 +74,11 @@ const cn = {
     errorCheckPass: '两次输入密码不一致',
     cert: '证件',
     pinyin: '姓名全拼',
+    placeholderPinyin: '如 Li Ming，Li Xi’an',
     emergencyName: '紧急联系人',
     signature: '电子签名',
-    applyDate: '报名日期'
+    applyDate: '报名日期',
+    errorNoAgree: '请阅读并同意用户注册协议'
   },
   header: {
     welcome: '欢迎访问上海马拉松官网',
@@ -97,6 +101,7 @@ const cn = {
     photo: '我的照片',
     account: '账户管理',
     info: '个人信息',
+    offspring: '亲子信息',
     integral: '我的积分',
     safe: '账户安全',
     phone: '绑定手机',
@@ -118,7 +123,8 @@ const cn = {
     projiect: '参赛项目',
     target: '中签状态',
     bus: '存衣车号',
-    pay: '立即支付'
+    pay: '立即支付',
+    position: '窗口号'
   }
 }
 

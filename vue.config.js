@@ -108,7 +108,7 @@ module.exports = {
         cacheGroups: {
           default: false,
           common: {
-            name: `chunk-common`,
+            name: 'chunk-common',
             minChunks: 2,
             priority: -20,
             chunks: 'initial',
@@ -154,27 +154,6 @@ module.exports = {
   // options for the PWA plugin.
   // see => https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
   // https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin
-  pwa: {
-    name: 'Vue-Cli3 实践',
-    themeColor: '#4DBA87',
-    msTileColor: '#000000',
-    appleMobileWebAppCapable: 'yes',
-    appleMobileWebAppStatusBarStyle: 'black',
-    iconPaths: {
-      favicon32: 'img/icons/fuji-mountain-32x32.png',
-      favicon16: 'img/icons/fuji-mountain-16x16.png',
-      appleTouchIcon: 'img/icons/apple-touch-icon-152x152.png',
-      maskIcon: 'img/icons/safari-pinned-tab.svg',
-      msTileImage: 'img/icons/msapplication-icon-144x144.png'
-    },
-    // configure the workbox plugin (GenerateSW or InjectManifest)
-    workboxPluginMode: 'InjectManifest',
-    workboxOptions: {
-      // swSrc is required in InjectManifest mode.
-      swSrc: 'public/service-worker.js'
-      // ...other Workbox options...
-    }
-  },
 
   // configure webpack-dev-server behavior
   devServer: {
@@ -184,7 +163,16 @@ module.exports = {
     https: false,
     hotOnly: false,
     // See https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#configuring-proxy
-    proxy: null, // string | Object
+    proxy: {
+      '/app': {
+        target: 'http://161.189.58.24',
+        ws: true,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/app': ''
+        }
+      }
+    },
     // eslint-disable-next-line no-unused-vars
     before: app => {}
   },

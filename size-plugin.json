@@ -1,0 +1,30 @@
+[
+  {
+    "timestamp": 1583925443283,
+    "files": [
+      { "filename": "css/app.dac50df1.css", "previous": 0, "size": 31557, "diff": 31557 },
+      { "filename": "js/app.********.js", "previous": 0, "size": 167346, "diff": 167346 },
+      { "filename": "css/chunk-14a44fd7.9a514e31.css", "previous": 0, "size": 1638, "diff": 1638 },
+      { "filename": "js/chunk-14a44fd7.********.js", "previous": 0, "size": 31956, "diff": 31956 },
+      { "filename": "css/chunk-14bc23e2.d8dc0f15.css", "previous": 0, "size": 757, "diff": 757 },
+      { "filename": "js/chunk-14bc23e2.********.js", "previous": 0, "size": 5892, "diff": 5892 },
+      { "filename": "css/chunk-3205abc2.1174b87a.css", "previous": 0, "size": 744, "diff": 744 },
+      { "filename": "js/chunk-3205abc2.********.js", "previous": 0, "size": 1401, "diff": 1401 },
+      { "filename": "css/chunk-3261487c.5bfd88d2.css", "previous": 0, "size": 1910, "diff": 1910 },
+      { "filename": "js/chunk-3261487c.********.js", "previous": 0, "size": 4614, "diff": 4614 },
+      { "filename": "css/chunk-5fcf4a1a.0e1557ca.css", "previous": 0, "size": 2987, "diff": 2987 },
+      { "filename": "js/chunk-5fcf4a1a.********.js", "previous": 0, "size": 41257, "diff": 41257 },
+      { "filename": "css/chunk-a012ba2a.4bd8a93d.css", "previous": 0, "size": 2501, "diff": 2501 },
+      { "filename": "js/chunk-a012ba2a.********.js", "previous": 0, "size": 7492, "diff": 7492 },
+      { "filename": "js/element.********.js", "previous": 0, "size": 133278, "diff": 133278 },
+      { "filename": "index.html", "previous": 0, "size": 902, "diff": 902 },
+      { "filename": "service-worker.js", "previous": 0, "size": 1192, "diff": 1192 },
+      {
+        "filename": "precache-manifest.fa9997875f7f33b0e2c6638c13632f8f.js",
+        "previous": 0,
+        "size": 1439,
+        "diff": 1439
+      }
+    ]
+  }
+]

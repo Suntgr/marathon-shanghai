@@ -1,9 +1,9 @@
 <template>
   <div class="details">
     <div class="card">
-      <img class="pic" src="http://img.la/200x300" />
+      <img class="pic" :src="bannerImg" />
       <div class="right-part">
-        <p class="title">2019年上海国际马拉松赛</p>
+        <p class="title">{{ title }}</p>
         <ul class="project">
           <li class="item" v-for="(item, index) in project" :key="index">
             <span>{{ item.name }}</span
@@ -44,7 +44,7 @@
       <ul class="info-content">
         <li class="grid">
           <span class="name">{{ $t('login.name') }}</span>
-          <img class="signature" src="http://img.la/200x300" />
+          <img class="signature" :src="eleSignImg" />
         </li>
         <li class="grid">
           <span class="name">{{ $t('login.applyDate') }}</span>
@@ -56,38 +56,58 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
 export default {
   components: {},
   data() {
     return {
-      project: [
-        { name: this.$t('user.projiect'), value: '慈善跑' },
-        { name: this.$t('user.tableNumber'), value: '--' },
-        { name: this.$t('user.target'), value: '中签' },
-        { name: this.$t('user.position'), value: '--' },
-        { name: this.$t('user.tableStatus'), value: '未支付' },
-        { name: this.$t('user.bus'), value: '--' }
-      ],
-      userInfo: [
-        { name: this.$t('login.name'), value: '李晓明' },
-        { name: this.$t('login.country'), value: '中国' },
-        { name: this.$t('login.cert'), value: '身份证：110xxxxxxxxxxxxxxx' },
-        { name: this.$t('login.birthday'), value: '1988-08-08' },
-        { name: this.$t('login.gender'), value: '男' },
-        { name: this.$t('login.pinyin'), value: 'Li Xiaoming' },
-        { name: this.$t('login.phone'), value: '15088889999' },
-        { name: this.$t('login.email'), value: '111@163.com' }
-      ],
-      emergencyInfo: [
-        { name: this.$t('login.name'), value: '李晓明' },
-        { name: this.$t('login.concern'), value: '朋友' },
-        { name: this.$t('login.address'), value: '上海市静安区灵石路984号' }
-      ]
+      project: [],
+      title: '',
+      bannerImg: '',
+      eleSignImg: ''
     }
   },
   computed: {
+    ...mapState('game', ['applyDetails']),
+    ...mapGetters('user', ['user', 'sosUser']),
     showTip() {
       return this.project.find(el => el.value === '未支付')
+    },
+    userInfo() {
+      return [
+        { name: this.$t('login.name'), value: this.user.truename },
+        { name: this.$t('login.country'), value: this.user.country_name },
+        { name: this.$t('login.cert'), value: this.user.idName },
+        { name: this.$t('login.birthday'), value: this.user.birthday },
+        { name: this.$t('login.gender'), value: this.user.genderName },
+        { name: this.$t('login.pinyin'), value: this.user.full_name },
+        { name: this.$t('login.phone'), value: this.user.phone },
+        { name: this.$t('login.email'), value: this.user.phone }
+      ]
+    },
+    emergencyInfo() {
+      return [
+        { name: this.$t('login.name'), value: this.sosUser.truename },
+        { name: this.$t('login.concern'), value: this.sosUser.relation },
+        { name: this.$t('login.address'), value: this.sosUser.fullAddress }
+      ]
+    }
+  },
+  watch: {
+    applyDetails(applyDetails) {
+      if (applyDetails) {
+        this.project = [
+          { name: this.$t('user.projiect'), value: applyDetails.activity.entry_name },
+          { name: this.$t('user.tableNumber'), value: applyDetails.sign.entry_number },
+          { name: this.$t('user.target'), value: applyDetails.sign.status_name },
+          { name: this.$t('user.position'), value: applyDetails.window_number },
+          { name: this.$t('user.tableStatus'), value: applyDetails.status_name },
+          { name: this.$t('user.bus'), value: applyDetails.sign.car_number }
+        ]
+        this.title = applyDetails.activity.name
+        this.bannerImg = applyDetails.activity.image_url
+        this.eleSignImg = applyDetails.sign.elec_sign
+      }
     }
   },
   created() {},
@@ -120,6 +140,7 @@ export default {
       width: 250px;
       height: 132px;
       margin-right: 45px;
+      object-fit: cover;
     }
     .project {
       display: flex;

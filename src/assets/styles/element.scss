@@ -1,5 +1,6 @@
 /* 改变主题色变量 */
 $--color-primary: #d83838;
+$--color-warning: #d7a746;
 
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
@@ -34,9 +35,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   color: #4a90e2;
   border-color: #4a90e2;
   &:hover {
-    background: #4a90e2;
+    background-color: #4a90e2;
     color: #ffffff;
     // background: rgba($color: #4a90e2, $alpha: 0.6);
+  }
+  &:focus {
+    background-color: #e1e9f3;
   }
 }
 .el-form-item.is-success .el-input__inner,
@@ -47,4 +51,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 .el-form-item {
   margin-bottom: 0;
+}
+.el-message__content {
+  line-height: 1.3;
 }

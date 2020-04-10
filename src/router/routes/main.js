@@ -29,6 +29,24 @@ export default [
     },
     component: () => import('@pages/user/user.vue')
   },
+  {
+    path: '/apply',
+    name: 'apply',
+    meta: {
+      ignoreAuth: true,
+      title: '我要报名'
+    },
+    component: () => import('@pages/apply/apply.vue')
+  },
+  {
+    path: '/game',
+    name: 'game',
+    meta: {
+      ignoreAuth: true,
+      title: '赛事信息'
+    },
+    component: () => import('@pages/game/game.vue')
+  },
   // 国际官网
   {
     path: '/inter',

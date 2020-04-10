@@ -1,13 +1,15 @@
 <template>
   <div class="photp-content">
-    <div class="card" v-for="i in 3" :key="i.id">
+    <div class="card" v-for="(photo, index) in photoPart" :key="index">
       <div class="title">
-        <span>2019上海国际半程马拉松赛</span>
-        <span class="more" @click="checkMore">MORE <i class="el-icon-plus"></i></span>
+        <span>{{ photo.name }}</span>
+        <span v-if="photo.more" class="more" @click="checkMore(index)"
+          >MORE <i class="el-icon-plus"></i
+        ></span>
       </div>
       <ul class="photo-list">
-        <li class="photo-box" v-for="i in 4" :key="i.id">
-          <img class="photo" src="http://img.la/192x122" />
+        <li class="photo-box" v-for="(item, idx) in photo.part" :key="idx">
+          <img class="photo" :src="item.image_url" />
         </li>
         <li class="photo-box" v-for="i in 3" :key="i.id"></li>
       </ul>
@@ -16,17 +18,26 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {},
   data() {
-    return {}
+    return {
+      photoList: []
+    }
   },
-  computed: {},
-  created() {},
+  computed: {
+    ...mapGetters('game', ['photoPart'])
+  },
+  created() {
+    this.getPhoto()
+  },
   mounted() {},
   methods: {
-    checkMore() {
+    ...mapActions('game', ['getPhoto']),
+    checkMore(index) {
       this.$emit('photo')
+      this.$store.commit('game/SET_ACTIVEDPHOTO', index)
     }
   }
 }
@@ -71,6 +82,7 @@ export default {
       .photo {
         width: 100%;
         height: 100%;
+        object-fit: cover;
       }
       &:empty {
         height: 0;

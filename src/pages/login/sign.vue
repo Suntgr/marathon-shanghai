@@ -19,9 +19,9 @@
         <el-step :title="$t('login.step3')"></el-step>
         <el-step :title="$t('login.step4')"></el-step>
       </el-steps>
-      <step1 v-if="activeStep === 1" @next="activeStep = 2"></step1>
-      <step2 v-if="activeStep === 2" @next="activeStep = 3"></step2>
-      <step3 v-if="activeStep === 3" @next="activeStep = 4"></step3>
+      <step1 v-if="activeStep === 1" :ruleForm="ruleForm" @next="activeStep = 2"></step1>
+      <step2 v-if="activeStep === 2" :ruleForm="ruleForm" @next="activeStep = 3"></step2>
+      <step3 v-if="activeStep === 3" :user="ruleForm" @next="activeStep = 4"></step3>
       <step4 v-if="activeStep === 4"></step4>
     </div>
     <footer-lang @reset="resetValue"></footer-lang>
@@ -38,7 +38,16 @@ export default {
   components: { FooterLang, Step1, Step2, Step3, Step4 },
   data() {
     return {
-      activeStep: 1
+      activeStep: 3,
+      ruleForm: {
+        phoneOrEmail: '15072367165',
+        imgCode: '',
+        msgCode: '',
+        isAgree: '',
+        nickname: '',
+        pass: '',
+        checkPass: ''
+      }
     }
   },
   computed: {},
@@ -77,7 +86,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: url('../../assets/images/sign-bg.png') no-repeat center bottom/contain;
+    background: url('../../assets/images/sign-bg.png') no-repeat center bottom/contain #f4f4f4;
     position: relative;
     &::before {
       // content: '';
@@ -107,7 +116,8 @@ export default {
     margin: 60px auto;
     justify-content: center;
     .el-step__head.is-finish {
-      .el-step__icon {
+      .el-step__icon,
+      .el-step__line {
         background: #ac2424;
         color: #ffffff;
       }

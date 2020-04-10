@@ -2,29 +2,55 @@
   <div class="photp-content">
     <div class="card">
       <div class="title">
-        <span>2019上海国际半程马拉松赛</span>
+        <span>{{ photoList.name }}</span>
       </div>
       <ul class="photo-list">
-        <li class="photo-box" v-for="i in 18" :key="i.id">
-          <img class="photo" src="http://img.la/192x122" />
+        <li class="photo-box" v-for="(item, index) in list" :key="index">
+          <img class="photo" :src="item.image_url" />
         </li>
         <li class="photo-box" v-for="i in 3" :key="i.id"></li>
       </ul>
-      <el-pagination background layout="prev, pager, next" :total="100"> </el-pagination>
+      <el-pagination
+        v-if="total > 20"
+        background
+        @current-change="handleCurrentChange"
+        :page-sizes="pageSizes"
+        layout="prev, pager, next"
+        :total="total"
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   components: {},
   data() {
-    return {}
+    return {
+      pageSizes: [20],
+      list: []
+    }
   },
-  computed: {},
-  created() {},
+  computed: {
+    ...mapGetters('game', ['photoPart', 'activedPhoto']),
+    photoList() {
+      return this.photoPart[this.activedPhoto]
+    },
+    total() {
+      return this.photoList.images.length
+    }
+  },
+  created() {
+    this.handleCurrentChange(1)
+  },
   mounted() {},
-  methods: {}
+  methods: {
+    handleCurrentChange(val) {
+      this.list = this.photoList.images.slice(this.pageSizes * (val - 1), this.pageSizes * val)
+    }
+  }
 }
 </script>
 

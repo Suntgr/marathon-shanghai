@@ -1,6 +1,6 @@
 <template>
   <div class="user-page">
-    <header-m></header-m>
+    <t-header></t-header>
     <div class="logo-box">
       <div class="inner-box">
         <img class="sm-logo" src="@/assets/images/sm-logo.png" />
@@ -15,7 +15,7 @@
           <el-breadcrumb-item v-if="nextMenu">{{ nextMenu }}</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="menu-content">
-          <nav-menu @update="setMenu"></nav-menu>
+          <t-side-bar @update="setMenu"></t-side-bar>
           <component
             :is="currentTabComponent"
             @details="handleDetails"
@@ -24,14 +24,14 @@
         </div>
       </div>
     </div>
-    <footer-m></footer-m>
+    <t-footer></t-footer>
   </div>
 </template>
 
 <script>
-import HeaderM from '@/components/header.vue'
-import FooterM from '@/components/footer.vue'
-import NavMenu from '@/components/NavMenu.vue'
+import THeader from '@/components/header.vue'
+import TFooter from '@/components/footer.vue'
+import TSideBar from '@/components/SideBar.vue'
 import TGame from '@/components/userTabContainer/game.vue'
 import TApply from '@/components/userTabContainer/apply.vue'
 import TDetail from '@/components/userTabContainer/details.vue'
@@ -39,18 +39,21 @@ import TRanking from '@/components/userTabContainer/ranking.vue'
 import TCert from '@/components/userTabContainer/certificate.vue'
 import TPhoto from '@/components/userTabContainer/photo.vue'
 import TPhotoMore from '@/components/userTabContainer/morePhoto.vue'
+import TUserCenter from '@/components/userTabContainer/userCenter.vue'
+import { mapActions } from 'vuex'
 export default {
   components: {
-    HeaderM,
-    FooterM,
-    NavMenu,
+    THeader,
+    TFooter,
+    TSideBar,
     TGame,
     TApply,
     TDetail,
     TRanking,
     TCert,
     TPhoto,
-    TPhotoMore
+    TPhotoMore,
+    TUserCenter
   },
   data() {
     return {
@@ -88,12 +91,19 @@ export default {
       if (this.photoDetails) {
         return 't-photo-more'
       }
+      if (this.currentMenu === this.$t('user.info')) {
+        return 't-user-center'
+      }
       return ''
     }
   },
-  created() {},
+  created() {
+    this.getApplyList()
+    this.getCertificate()
+  },
   mounted() {},
   methods: {
+    ...mapActions('game', ['getApplyList', 'getCertificate']),
     setMenu(menu) {
       this.currentMenu = menu
       this.nextMenu = ''

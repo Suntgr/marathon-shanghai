@@ -50,7 +50,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  &.cn {
+  &.zh-CN {
     .td {
       width: 56px;
       display: inline-block;

@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <template>
-  <i :class="className" :style="styleObject" />
+  <i />
 </template>
 
 <script>

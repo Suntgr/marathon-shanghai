@@ -26,21 +26,21 @@
       <el-col :span="12">
         <div class="grid-content">
           <p class="grid-title">{{ $t('user.apply') }}</p>
-          <div class="items">
-            <div v-for="i in 2" :key="i" class="history">
-              <p>2019年上海国际马拉松-慈善跑</p>
+          <div class="items" v-if="applyList">
+            <div v-for="(item, index) in applyList.list" :key="index" class="history">
+              <p>{{ item.name }}</p>
               <ul class="history-status">
                 <li class="item">
                   <span>中签状态：</span>
-                  <span>中签</span>
+                  <span>{{ item.status_name }}</span>
                 </li>
                 <li class="item">
                   <span>支付状态：</span>
-                  <span>已支付</span>
+                  <span>xxxxx</span>
                 </li>
                 <li class="item">
                   <span>参赛号：</span>
-                  <span>1008</span>
+                  <span>{{ item.entry_number }}</span>
                 </li>
               </ul>
             </div>
@@ -51,7 +51,13 @@
         <div class="grid-content">
           <p class="grid-title">{{ $t('user.certificate') }}</p>
           <div class="items dir-row">
-            <img v-for="i in 3" :key="i" class="certificate" src="http://img.la/200x300" />
+            <img
+              v-for="(item, index) in cert"
+              :key="index"
+              class="certificate"
+              :src="item.image_url"
+              :alt="item.name"
+            />
           </div>
         </div>
       </el-col>
@@ -60,6 +66,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   components: {},
   data() {
@@ -67,7 +74,9 @@ export default {
       circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
     }
   },
-  computed: {},
+  computed: {
+    ...mapState('game', ['applyList', 'cert'])
+  },
   created() {},
   mounted() {},
   methods: {}
@@ -142,6 +151,7 @@ export default {
     .certificate {
       width: 86px;
       height: 120px;
+      object-fit: cover;
       margin-right: 28px;
       margin-bottom: 28px;
     }

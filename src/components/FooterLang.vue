@@ -1,9 +1,9 @@
 <template>
   <footer class="footer">
     <ul class="footer-langs">
-      <li class="btn" @click="setLanguage('cn')">中文</li>
+      <li class="btn" @click="setLanguage('zh-CN')">中文</li>
       <li class="btn" @click="setLanguage('en')">English</li>
-      <li class="btn" @click="setLanguage('jp')">日本語</li>
+      <li class="btn" @click="setLanguage('ja')">日本語</li>
     </ul>
     <span>© Copyright 2019 Organizing Committee of Shanghai Marathon 沪ICP备17043220号</span>
   </footer>

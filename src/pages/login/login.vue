@@ -9,6 +9,7 @@
             class="input-box"
             v-model.trim="ruleForm.account"
             :placeholder="$t('login.account')"
+            autocomplete="nope"
           ></el-input>
         </el-form-item>
         <el-form-item prop="password">
@@ -16,6 +17,8 @@
             class="input-box"
             v-model.trim="ruleForm.password"
             :placeholder="$t('login.password')"
+            autocomplete="nope"
+            show-password
           ></el-input>
         </el-form-item>
         <div class="submit-btn">
@@ -79,6 +82,11 @@ export default {
   computed: {},
   created() {},
   mounted() {},
+  watch: {
+    '$i18n.locale'() {
+      console.log(12121)
+    }
+  },
   methods: {
     resetValue() {
       this.account = ''
@@ -87,10 +95,22 @@ export default {
     signUp() {
       this.$router.push('sign')
     },
+    login() {
+      this.$apis.user
+        .login({
+          username: this.ruleForm['account'],
+          password: this.ruleForm['password']
+        })
+        .then(({ data }) => {
+          console.log(data)
+          sessionStorage.setItem('token', data.token)
+          this.$router.push('apply')
+        })
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert('submit!')
+          this.login()
         } else {
           console.log('error submit!!')
           return false
@@ -153,7 +173,7 @@ export default {
       .el-input__inner {
         width: 400px;
         color: #ffffff;
-        background: transparent;
+        background: transparent !important;
         border: none;
         border-radius: 0;
         border-bottom: 1px solid;

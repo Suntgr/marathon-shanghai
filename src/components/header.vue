@@ -30,14 +30,14 @@
         </el-dropdown>
         <ul class="top-right">
           <li class="user-name" @click="showUser = !showUser" v-click-outside="closePopupUser">
-            <span>张三</span>
+            <span>{{ user.truename }}</span>
             <i class="el-icon-caret-bottom"></i>
             <div v-if="showUser" @click.stop>
               <el-card class="user-card">
                 <div class="user-info">
                   <img class="avatar" :src="circleUrl" />
-                  <p>张三</p>
-                  <p class="phone">18888889999</p>
+                  <p>{{ user.truename }}</p>
+                  <p class="phone">{{ user.phone }}</p>
                 </div>
                 <span class="out" @click="showUser = false">{{ $t('header.out') }}</span>
               </el-card>
@@ -75,34 +75,30 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   components: {},
   data() {
     return {
-      options: { cn: '中文 | 简体', en: 'English', jp: '日本語' },
+      options: { 'zh-CN': '中文 | 简体', en: 'English', ja: '日本語' },
       lang: '',
       circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
       showUser: false,
       showQrcode: false
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters('user', ['user'])
+  },
   created() {
     this.lang = this.options[localStorage.getItem('lang')] || '中文 | 简体'
-  },
-  mounted() {
-    // this.setSelectWidth(this.lang)
-    // document.querySelector('.lang-select .el-icon-arrow-up').classList.add('el-icon-caret-top')
+    this.getUser()
   },
   methods: {
+    ...mapActions('user', ['getUser']),
     changeLang(e) {
-      // this.setSelectWidth(e)
       this.$i18n.locale = e
       localStorage.setItem('lang', e)
-    },
-    setSelectWidth(e) {
-      const widths = { cn: 95, en: 70, jp: 68 }
-      document.querySelector('.lang-select .el-input__inner').style.width = widths[e] + 'px'
     },
     closePopupUser() {
       this.showUser = false
@@ -186,6 +182,7 @@ export default {
       align-items: center;
       list-style: none;
       position: relative;
+      z-index: 100;
       .user-name {
         margin-right: 35px;
         cursor: pointer;

@@ -1,19 +1,22 @@
 <template>
   <div class="certificate">
-    <div class="cert-box" v-for="i in 10" :key="i.id">
-      <img class="cert-pic" src="http://img.la/220x304" />
+    <div class="cert-box" v-for="(item, index) in cert" :key="index">
+      <img class="cert-pic" :src="item.image_url" :alt="item.name" />
     </div>
     <div v-for="i in 4" :key="i.id" class="cert-box"></div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   components: {},
   data() {
     return {}
   },
-  computed: {},
+  computed: {
+    ...mapState('game', ['cert'])
+  },
   created() {},
   mounted() {},
   methods: {}

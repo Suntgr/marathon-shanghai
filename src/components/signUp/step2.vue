@@ -26,7 +26,7 @@
         <span slot="prefix">{{ $t('login.password') }}</span>
       </el-input>
     </el-form-item>
-    <el-button class="next-btn" type="primary" @click="submitForm('ruleForm')">{{
+    <el-button class="next-btn" type="primary" @click="submitForm">{{
       $t('login.next')
     }}</el-button>
   </el-form>
@@ -63,11 +63,6 @@ export default {
       }
     }
     return {
-      ruleForm: {
-        nickname: '',
-        pass: '',
-        checkPass: ''
-      },
       rules: {
         nickname: [{ validator: validateNickname, trigger: 'blur' }],
         pass: [{ validator: validatePass, trigger: 'blur' }],
@@ -75,17 +70,33 @@ export default {
       }
     }
   },
+  props: {
+    ruleForm: {
+      type: Object,
+      default: () => {}
+    }
+  },
   computed: {},
   created() {},
   mounted() {},
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+    submitForm() {
+      this.$emit('next')
+      this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          this.$emit('next')
+          this.$apis.user
+            .sign({
+              username: this.ruleForm.phoneOrEmail,
+              password: this.ruleForm.pass,
+              nickname: this.ruleForm.nickname,
+              code: this.ruleForm.msgCode
+            })
+            .then(({ data }) => {
+              console.log(data)
+              sessionStorage.setItem('token', data.token)
+              this.$emit('next')
+            })
         } else {
-          this.$emit('next')
-          console.log('error submit!!')
           return false
         }
       })
@@ -96,7 +107,7 @@ export default {
 
 <style lang="scss">
 .userinfo-content.step2 {
-  &.cn {
+  &.zh-CN {
     .el-input.el-input--prefix {
       .el-input__inner {
         padding-left: 45px;
@@ -110,7 +121,7 @@ export default {
       }
     }
   }
-  &.jp {
+  &.ja {
     .el-input.el-input--prefix {
       .el-input__inner {
         padding-left: 100px;

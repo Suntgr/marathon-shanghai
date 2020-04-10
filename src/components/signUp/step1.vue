@@ -22,9 +22,9 @@
     <el-form-item prop="imgCode">
       <div class="code-box">
         <el-input v-model.trim="ruleForm.imgCode" :placeholder="$t('login.usePic')"></el-input>
-        <div class="change-img-code">
-          <img class="code-pic" src="http://img.la/100x40" />
-          <span>{{ $t('login.change') }}</span>
+        <div class="change-img-code" @click="changePicCode">
+          <img class="code-pic" :src="picCode" />
+          <span style="padding-right: 10px;">{{ $t('login.change') }}</span>
         </div>
       </div>
     </el-form-item>
@@ -32,17 +32,22 @@
       <div class="code-box">
         <el-input v-model.trim="ruleForm.msgCode" :placeholder="placeholderCode"></el-input>
         <div class="change-img-code">
-          <el-button class="blue-btn">{{ $t('login.getCode') }}</el-button>
+          <span v-if="countdown" class="countdown">{{ countdown }}</span>
+          <el-button v-else class="blue-btn" @click="validCode">{{
+            $t('login.getCode')
+          }}</el-button>
         </div>
       </div>
     </el-form-item>
-    <div class="agreement-switch">
-      <el-checkbox></el-checkbox>
-      <span class="btn-describe"
-        >{{ $t('login.agree') }}<a>{{ $t('login.agreement') }}</a></span
-      >
-    </div>
-    <el-button class="next-btn" type="primary" @click="submitForm('ruleForm')">{{
+    <el-form-item prop="isAgree">
+      <div class="agreement-switch">
+        <el-checkbox v-model="ruleForm.isAgree"></el-checkbox>
+        <span class="btn-describe"
+          >{{ $t('login.agree') }}<a>{{ $t('login.agreement') }}</a></span
+        >
+      </div>
+    </el-form-item>
+    <el-button class="next-btn" type="primary" @click="submitForm">{{
       $t('login.next')
     }}</el-button>
   </el-form>
@@ -85,18 +90,36 @@ export default {
       }
       callback()
     }
+    const validateAgree = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error(this.$t('login.errorNoAgree')))
+        return
+      }
+      callback()
+    }
     return {
+      isAgree: false,
       waySwitch: true,
-      ruleForm: {
-        phoneOrEmail: '',
-        imgCode: '',
-        msgCode: ''
-      },
+      // ruleForm: {
+      //   phoneOrEmail: '',
+      //   imgCode: '',
+      //   msgCode: '',
+      //   isAgree: ''
+      // },
       rules: {
         phoneOrEmail: [{ validator: validatePass, trigger: 'blur' }],
         imgCode: [{ validator: validatePassCode, trigger: 'blur' }],
-        msgCode: [{ validator: validatePassCode, trigger: 'blur' }]
-      }
+        msgCode: [{ validator: validatePassCode, trigger: 'blur' }],
+        isAgree: [{ validator: validateAgree, trigger: 'blur' }]
+      },
+      picCode: '/app/api/verification-code/captcha',
+      countdown: 0
+    }
+  },
+  props: {
+    ruleForm: {
+      type: Object,
+      default: () => {}
     }
   },
   computed: {
@@ -113,16 +136,68 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+    submitForm() {
+      this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          this.$emit('next')
+          this.$apis.user
+            .validateCode({
+              username: this.ruleForm.phoneOrEmail,
+              type: 1,
+              code: this.ruleForm.msgCode
+            })
+            .then(data => {
+              console.log(data)
+              this.$emit('next')
+            })
         } else {
-          this.$emit('next')
-          console.log('error submit!!')
           return false
         }
       })
+    },
+    changePicCode() {
+      this.picCode = `/app/api/verification-code/captcha?${Date.now()}`
+    },
+    setCountdown() {
+      this.countdown = 60
+      const timer = setInterval(() => {
+        this.countdown--
+        if (this.countdown === 0) {
+          clearInterval(timer)
+        }
+      }, 1000)
+    },
+    validCode() {
+      const fieldsToValidate = ['phoneOrEmail', 'imgCode']
+      const _self = this
+      Promise.all(
+        fieldsToValidate.map(item => {
+          return new Promise(function(resolve) {
+            _self.$refs.ruleForm.validateField(item, error => {
+              resolve(error)
+            })
+          })
+        })
+      ).then(data => {
+        console.info(data)
+        const ok = data.every(e => e === '')
+        console.info(ok)
+        if (ok) this.getMsgCode()
+      })
+    },
+    getMsgCode() {
+      this.$apis.user
+        .getCode({
+          username: this.ruleForm.phoneOrEmail,
+          type: 1,
+          captcha: this.ruleForm.imgCode
+        })
+        .then(data => {
+          this.$message({
+            message: data.msg,
+            type: 'success'
+          })
+          this.setCountdown()
+        })
     }
   }
 }
@@ -182,6 +257,7 @@ export default {
       align-items: center;
       justify-content: space-between;
       font-size: 14px;
+      background: #ffffff;
       cursor: pointer;
       .blue-btn {
         width: 100%;
@@ -200,6 +276,11 @@ export default {
       margin-left: 10px;
       font-size: 14px;
     }
+  }
+  .countdown {
+    width: 100%;
+    text-align: center;
+    display: inline-block;
   }
   .next-btn {
     width: 100%;

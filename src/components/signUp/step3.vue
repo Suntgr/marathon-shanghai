@@ -2,31 +2,63 @@
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="sign-step3">
     <div class="userinfo-content step3" :class="$i18n.locale">
       <div class="sign-title">{{ $t('login.step3Title') }}</div>
-      <el-form-item prop="name">
-        <el-input
-          v-model.trim="ruleForm.name"
-          class="short-input"
-          :placeholder="$t('login.placeholderName')"
-        >
-          <span slot="prefix">{{ $t('login.name') }}</span>
-        </el-input>
-      </el-form-item>
-      <el-form-item prop="country">
-        <el-select
-          class="short-input country"
-          v-model="ruleForm.country"
-          :placeholder="$t('login.placeholderCountry')"
-        >
-          <el-option
-            v-for="item in countries"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+      <div class="row-spacebetween">
+        <el-form-item prop="name">
+          <el-input
+            v-model.trim="ruleForm.name"
+            class="short-input"
+            @blur="converToPinnyin"
+            :placeholder="$t('login.placeholderName')"
           >
-          </el-option>
-          <span slot="prefix">{{ $t('login.country') }}</span>
-        </el-select>
-      </el-form-item>
+            <span slot="prefix">{{ $t('login.name') }}</span>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="namePingyin">
+          <el-input
+            v-model.trim="ruleForm.namePingyin"
+            class="short-input"
+            :placeholder="$t('login.placeholderPinyin')"
+          >
+            <span slot="prefix">{{ $t('login.pinyin') }}</span>
+          </el-input>
+        </el-form-item>
+      </div>
+      <div class="row-spacebetween">
+        <el-form-item prop="country">
+          <el-select
+            class="short-input country"
+            v-model="ruleForm.country"
+            :placeholder="$t('login.placeholderCountry')"
+          >
+            <el-option
+              v-for="item in countries"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+            <span slot="prefix">{{ $t('login.country') }}</span>
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="+this.user.phoneOrEmail" prop="userEmail">
+          <el-input
+            v-model.trim="ruleForm.userEmail"
+            class="other-phone"
+            :placeholder="$t('login.placeholderEmail')"
+          >
+            <span slot="prefix">{{ $t('login.email') }}</span>
+          </el-input>
+        </el-form-item>
+        <el-form-item v-else prop="userPhone">
+          <el-input
+            v-model.trim="ruleForm.userPhone"
+            class="other-phone"
+            :placeholder="$t('login.placeholderOtherPhone')"
+          >
+            <span slot="prefix">{{ $t('login.phone') }}</span>
+          </el-input>
+        </el-form-item>
+      </div>
       <el-form-item prop="idCard">
         <el-input
           :placeholder="$t('login.placeholderId')"
@@ -34,8 +66,12 @@
           class="input-with-select"
         >
           <el-select v-model="idType" slot="prepend">
-            <el-option :label="$t('login.id')" value="1"></el-option>
-            <el-option :label="$t('login.passport')" value="2"></el-option>
+            <el-option
+              v-for="(item, index) in $t('login.idType')"
+              :key="index"
+              :label="item"
+              :value="index"
+            ></el-option>
           </el-select>
         </el-input>
       </el-form-item>
@@ -45,6 +81,8 @@
           <el-date-picker
             class="birthday"
             v-model="ruleForm.birthday"
+            value-format="yyyy-MM-dd"
+            default-value="2000-10-01"
             prefix-icon="1"
             type="date"
             :placeholder="$t('login.placeholderBirthday')"
@@ -92,15 +130,22 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="concern">
-          <el-select
+          <el-input v-model.trim="ruleForm.concern" class="concern">
+            <span slot="prefix">{{ $t('login.concern') }}</span>
+          </el-input>
+          <!-- <el-select
             class="short-input concern"
             v-model="ruleForm.concern"
             :placeholder="$t('login.placeholder')"
           >
-            <el-option :label="$t('login.male')" value="1"></el-option>
-            <el-option :label="$t('login.female')" value="2"></el-option>
+            <el-option
+              v-for="(item, index) in $t('login.concernList')"
+              :key="index"
+              :label="item"
+              :value="item"
+            ></el-option>
             <span slot="prefix">{{ $t('login.concern') }}</span>
-          </el-select>
+          </el-select> -->
         </el-form-item>
       </div>
       <el-form-item prop="phone">
@@ -137,7 +182,9 @@
 </template>
 
 <script>
-import addressOptions from '../../assets/js/address.js'
+// var pinyin = require('pinyin')
+import pinyin from 'pinyin'
+import addressOptions from '@/assets/js/address.js'
 export default {
   components: {},
   data() {
@@ -162,13 +209,13 @@ export default {
     }
     return {
       addressOptions,
-      idType: this.$t('login.id'),
-      countries: [
-        { value: 1, label: '中国' },
-        { value: 2, label: '日本' }
-      ],
+      idType: 0,
+      countries: [],
       ruleForm: {
         name: '',
+        namePingyin: '',
+        userPhone: '',
+        userEmail: '',
         country: '',
         idCard: '',
         birthday: '',
@@ -183,6 +230,9 @@ export default {
       },
       rules: {
         name: [{ required: true, message: this.$t('login.placeholderName'), trigger: 'blur' }],
+        namePingyin: [
+          { required: true, message: this.$t('login.placeholderName'), trigger: 'blur' }
+        ],
         country: [
           { required: true, message: this.$t('login.placeholderCountry'), trigger: 'change' }
         ],
@@ -211,6 +261,12 @@ export default {
       }
     }
   },
+  props: {
+    user: {
+      type: Object,
+      default: () => {}
+    }
+  },
   watch: {
     '$i18n.locale'() {
       this.idType = this.$t('login.id')
@@ -218,32 +274,90 @@ export default {
       this.changeAddessName()
     }
   },
-  created() {},
+  created() {
+    this.$apis.user.getCountries().then(({ data }) => {
+      this.countries = data.list.map(e => ({ value: e.area_id, label: e.name }))
+    })
+    console.log(11, this.user)
+    // if (+this.user.phoneOrEmail) {
+    //   this.ruleForm.userEmail = ''
+    //   this.rules.userEmail = [{ required: true, validator: validateAccount, trigger: 'blur' }]
+    // } else {
+    //   email = this.user.phoneOrEmail
+    //   phone = '222'
+    // }
+  },
   mounted() {
     this.setBirthdayName()
     this.setAddressName()
     this.setBirthdayIcon()
-    const a = document.querySelector('.el-cascader.address .el-input .el-input__prefix')
-    console.log(a)
   },
   methods: {
+    converToPinnyin() {
+      if (this.ruleForm.name) {
+        const name = pinyin(this.ruleForm.name, { style: pinyin.STYLE_NORMAL })
+        console.log(name)
+        const firstUpperCase = ([first, ...rest]) => first.toUpperCase() + rest.join('')
+        this.ruleForm.namePingyin = name.reduce((p, c) => {
+          return p + ' ' + firstUpperCase(c[0])
+        }, '')
+        console.log(this.ruleForm.namePingyin)
+      }
+    },
     setBirthdayName() {
       document.querySelector('.birthday .el-input__icon').innerText = this.$t('login.birthday')
+    },
+    postInfo() {
+      let email, phone
+      if (+this.user.phoneOrEmail) {
+        email = this.ruleForm.userEmail
+        phone = this.user.phoneOrEmail
+      } else {
+        email = this.user.phoneOrEmail
+        phone = this.ruleForm.userPhone
+      }
+      Promise.all([
+        this.$apis.user.updateUserInfo({
+          truename: this.ruleForm.name,
+          full_name: this.ruleForm.namePingyin,
+          nickname: this.user.nickname,
+          gender: this.ruleForm.gender,
+          card_type: this.idType,
+          card_id: this.ruleForm.idCard,
+          email,
+          phone,
+          country_id: this.ruleForm.country,
+          birthday: this.ruleForm.birthday,
+          provinces_id: this.ruleForm.address[0] + '0000',
+          city_id: this.ruleForm.address[1] + '00',
+          area_id: this.ruleForm.address[2],
+          address: this.ruleForm.detailedAddress
+        }),
+        this.$apis.user.updateOtherInfo({
+          truename: this.ruleForm.name2,
+          relation: this.ruleForm.concern,
+          phone: this.ruleForm.phone,
+          provinces_id: this.ruleForm.otherAddress[0] + '0000',
+          city_id: this.ruleForm.otherAddress[1] + '00',
+          area_id: this.ruleForm.otherAddress[2],
+          address: this.ruleForm.detailedAddress2
+        })
+      ]).then(() => {
+        this.$emit('next')
+      })
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$emit('next')
+          this.postInfo()
         } else {
-          console.log('error submit!!')
           return false
         }
       })
     },
     setBirthdayIcon() {
-      document.querySelector(
-        '.birthday .el-input__suffix'
-      ).innerHTML = `<i class="el-select__caret el-input__icon el-icon-arrow-down"></i>`
+      document.querySelector('.birthday .el-input__suffix').innerHTML =
+        '<i class="el-select__caret el-input__icon el-icon-arrow-down"></i>'
     },
     setAddressName() {
       document.querySelectorAll('.el-cascader.address .el-input').forEach(node => {
@@ -258,6 +372,10 @@ export default {
         .querySelectorAll('.el-cascader.address .el-input .el-input__prefix')
         .forEach(node => (node.innerText = this.$t('login.address')))
     }
+  },
+  beforeDestroy() {
+    console.log(22, this.ruleForm)
+    sessionStorage.setItem('user', JSON.stringify(this.ruleForm))
   }
 }
 </script>
@@ -271,7 +389,7 @@ export default {
     display: block;
     width: 240px;
   }
-  &.cn {
+  &.zh-CN {
     .country .el-input--prefix {
       .el-input__inner {
         padding-left: 80px;
@@ -281,7 +399,8 @@ export default {
       width: 40px;
     }
     .concern {
-      .el-input--prefix {
+      width: 240px;
+      &.el-input--prefix {
         .el-input__inner {
           padding-left: 105px;
         }
@@ -337,7 +456,7 @@ export default {
       align-items: flex-start;
       .concern {
         width: 100%;
-        .el-input--prefix {
+        &.el-input--prefix {
           .el-input__inner {
             padding-left: 180px;
           }
@@ -352,7 +471,7 @@ export default {
       }
     }
   }
-  &.jp {
+  &.ja {
     .el-input--prefix {
       .el-input__inner {
         padding-left: 65px;
@@ -363,7 +482,8 @@ export default {
       text-align: left;
     }
     .concern {
-      .el-input--prefix {
+      width: 240px;
+      &.el-input--prefix {
         .el-input__inner {
           padding-left: 120px;
         }
