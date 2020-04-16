@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   components: {},
   data() {
@@ -57,10 +57,8 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    ...mapActions('game', ['getApplyDetails']),
     handleDetails(row) {
-      this.getApplyDetails({ sign_id: row.id })
-      this.$emit('details', row)
+      this.$router.push({ name: 'details', params: { sId: row.id } })
     }
   }
 }

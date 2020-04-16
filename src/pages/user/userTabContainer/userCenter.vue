@@ -7,32 +7,40 @@
           <i class="el-icon-warning"></i>
           报名必须条件，确认信息后将不能修改(请务必真实)。
         </span>
-        <a class="btn">编辑</a>
+        <a v-if="!editing" class="btn" @click="editing = true">编辑</a>
       </div>
       <div class="content">
-        <!-- <ul class="info-content">
+        <ul v-if="!editing" class="info-content">
           <li class="grid" v-for="(user, index) in userInfo" :key="index">
             <span class="name">{{ user.name }}</span>
             <span class="value">{{ user.value }}</span>
           </li>
-        </ul> -->
-        <el-form class="info-content" :inline="true" label-width="75px">
-          <el-form-item v-for="(item, index) in userInfo" :key="index" :label="item.name">
-            <el-input :value="item.value"></el-input>
-          </el-form-item>
-          <el-form-item class="address-box" label="现居地址">
-            <el-cascader
-              :props="{ value: 'code', label: 'name' }"
-              :options="addressOptions"
-              :value="user.cascaderValue"
-            ></el-cascader>
-            <el-input class="address" :value="user.address"></el-input>
-          </el-form-item>
-        </el-form>
-        <div class="photo-btn">
-          <img class="photo" src="http://img.la/200x300" />
-          <span>xxxx</span>
-        </div>
+        </ul>
+        <template v-else>
+          <div class="editor-content">
+            <el-form class="info-content" :inline="true" label-width="75px">
+              <el-form-item v-for="(item, index) in userInfo" :key="index" :label="item.name">
+                <el-input :value="item.value" :disabled="item.disabled"></el-input>
+              </el-form-item>
+              <el-form-item class="address-box" label="现居地址">
+                <el-cascader
+                  :props="{ value: 'code', label: 'name' }"
+                  :options="addressOptions"
+                  :value="user.cascaderValue"
+                ></el-cascader>
+                <el-input class="address" :value="user.address"></el-input>
+              </el-form-item>
+            </el-form>
+            <div class="photo-btn">
+              <img class="photo" src="http://img.la/200x300" />
+              <span class="true-name">{{ user.truename }}</span>
+            </div>
+          </div>
+          <div class="editor-btns">
+            <el-button type="warning">保存</el-button>
+            <el-button type="warning" plain>取消</el-button>
+          </div>
+        </template>
       </div>
     </div>
   </div>
@@ -45,19 +53,20 @@ export default {
   components: {},
   data() {
     return {
-      addressOptions
+      addressOptions,
+      editing: false
     }
   },
   computed: {
     ...mapGetters('user', ['user', 'sosUser']),
     userInfo() {
       return [
-        { name: this.$t('login.name'), value: this.user.truename },
-        { name: this.$t('login.country'), value: this.user.country_name },
-        { name: this.$t('login.birthday'), value: this.user.birthday },
-        { name: this.$t('login.cert'), value: this.user.idName },
-        { name: this.$t('login.gender'), value: this.user.genderName },
-        { name: this.$t('login.pinyin'), value: this.user.full_name },
+        { name: this.$t('login.name'), value: this.user.truename, disabled: true },
+        { name: this.$t('login.country'), value: this.user.country_name, disabled: true },
+        { name: this.$t('login.birthday'), value: this.user.birthday, disabled: true },
+        { name: this.$t('login.cert'), value: this.user.idName, disabled: true },
+        { name: this.$t('login.gender'), value: this.user.genderName, disabled: true },
+        { name: this.$t('login.pinyin'), value: this.user.full_name, disabled: true },
         { name: this.$t('login.phone'), value: this.user.phone },
         { name: this.$t('login.email'), value: this.user.phone }
       ]
@@ -92,11 +101,11 @@ export default {
       .btn {
         color: #317ad7;
         margin-left: auto;
+        cursor: pointer;
       }
     }
     .content {
       padding: 10px 30px;
-      display: flex;
       .info-content {
         flex: 5;
         display: flex;
@@ -118,8 +127,11 @@ export default {
           }
         }
       }
-      .el-form-item {
+      .el-form {
         margin-top: 30px;
+      }
+      .el-form-item {
+        // margin-top: 30px;
         .el-form-item__label {
           text-align: justify;
           &::after {
@@ -154,6 +166,24 @@ export default {
           border-radius: 100%;
           overflow: hidden;
         }
+        .true-name {
+          width: 200px;
+          line-height: 44px;
+          text-align: center;
+          border: 1px solid #d8dde6;
+          border-radius: 3px;
+          margin-top: 22px;
+        }
+      }
+    }
+    .editor-content {
+      display: flex;
+    }
+    .editor-btns {
+      margin-left: 70px;
+      .el-button {
+        width: 140px;
+        margin-right: 25px;
       }
     }
   }

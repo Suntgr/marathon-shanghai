@@ -2,6 +2,7 @@
 
 export default {
   gameList: state => {
+    if (!state.applyList) return []
     return state.applyList.list.map(el => ({
       id: el.sign_id,
       event: el.name,

@@ -5,13 +5,16 @@ import mutations from './mutations'
 import actions from './actions'
 
 const state = {
-  activityId: 1,
+  activityId: '',
   entryType: '',
   applyList: null,
   cert: null,
   applyDetails: null,
   photo: [],
-  activedPhoto: 0
+  activedPhoto: 0,
+  activityList: {},
+  maxChildrenNumber: 0,
+  parentChildId: ''
 }
 export default {
   namespaced: true,

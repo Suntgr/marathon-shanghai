@@ -29,7 +29,12 @@
           </el-dropdown-menu>
         </el-dropdown>
         <ul class="top-right">
-          <li class="user-name" @click="showUser = !showUser" v-click-outside="closePopupUser">
+          <li
+            v-if="isLogin"
+            class="user-name"
+            @click="showUser = !showUser"
+            v-click-outside="closePopupUser"
+          >
             <span>{{ user.truename }}</span>
             <i class="el-icon-caret-bottom"></i>
             <div v-if="showUser" @click.stop>
@@ -43,6 +48,11 @@
               </el-card>
             </div>
           </li>
+          <li v-else class="user-name">
+            <span class="login-btn" @click="goLogin">登录</span>
+            <el-divider direction="vertical"></el-divider>
+            <span class="login-btn" @click="goSign">注册</span>
+          </li>
           <li>
             <el-dropdown trigger="click" class="my-marathon">
               <div>
@@ -50,9 +60,12 @@
                 <i class="el-icon-caret-bottom"></i>
               </div>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>我的报名</el-dropdown-item>
-                <el-dropdown-item>我的成绩</el-dropdown-item>
-                <el-dropdown-item>我的证书</el-dropdown-item>
+                <el-dropdown-item
+                  v-for="item in menus"
+                  :key="item.linkName"
+                  @click.native="goUser(item.linkName)"
+                  >{{ item.name }}</el-dropdown-item
+                >
               </el-dropdown-menu>
             </el-dropdown>
           </li>
@@ -84,15 +97,25 @@ export default {
       lang: '',
       circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
       showUser: false,
-      showQrcode: false
+      showQrcode: false,
+      menus: [
+        { name: '我的报名', linkName: 'userApply' },
+        { name: '我的成绩', linkName: 'results' },
+        { name: '我的证书', linkName: 'certificate' }
+      ]
     }
   },
   computed: {
-    ...mapGetters('user', ['user'])
+    ...mapGetters('user', ['user']),
+    isLogin() {
+      return !!sessionStorage.getItem('token')
+    }
   },
   created() {
     this.lang = this.options[localStorage.getItem('lang')] || '中文 | 简体'
-    this.getUser()
+    if (!Object.keys(this.user).length && this.isLogin) {
+      this.getUser()
+    }
   },
   methods: {
     ...mapActions('user', ['getUser']),
@@ -107,16 +130,23 @@ export default {
       this.showQrcode = false
     },
     handleLang(e) {
-      console.log(e)
       this.$i18n.locale = e
       localStorage.setItem('lang', e)
       this.lang = this.options[e]
+    },
+    goLogin() {
+      this.$router.push({ name: 'login' })
+    },
+    goSign() {
+      this.$router.push({ name: 'sign' })
+    },
+    goUser(name) {
+      this.$router.push({ name, params: { actId: this.$route.params.actId } })
     }
   },
   directives: {
     'click-outside': {
       inserted: function(el, binding, vnode) {
-        console.log(2121)
         el.clickOutsideEvent = function(event) {
           // here I check that click was outside the el and his childrens
           if (!(el == event.target || el.contains(event.target))) {
@@ -141,6 +171,9 @@ export default {
     width: 100%;
     padding: 0 30px;
     border-bottom: 1px solid #edf0f5;
+  }
+  .login-btn {
+    cursor: pointer;
   }
   .inner-content {
     max-width: 1400px;

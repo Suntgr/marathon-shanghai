@@ -1,6 +1,17 @@
 /** @format */
 import { $apis } from '@helper'
 export default {
+  getActivityList({ commit }) {
+    return new Promise((resolve, reject) => {
+      $apis.game
+        .getActivityList()
+        .then(({ data }) => {
+          resolve(data)
+          commit('SET_ACTIVETYLIST', data)
+        })
+        .catch(err => reject(err))
+    })
+  },
   getApplyList({ commit }) {
     return new Promise((resolve, reject) => {
       $apis.game
@@ -37,7 +48,8 @@ export default {
         .catch(err => reject(err))
     })
   },
-  getPhoto({ commit }) {
+  getPhoto({ commit, state }) {
+    if (state.photo.length) return
     return new Promise((resolve, reject) => {
       $apis.game
         .getPhoto()

@@ -1,7 +1,7 @@
 <template>
   <div class="apply-step">
     <div class="title">4.请阅读参赛声明，并输入电子签名</div>
-    <div class="apply-content">
+    <div class="apply-content" v-loading="loading">
       <!-- <div class="content-title">2019上海国际马拉松赛竞赛规程</div> -->
       <div class="content" v-html="rule"></div>
     </div>
@@ -19,7 +19,9 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-button type="warning" class="agree" @click="agree">同意参赛声明</el-button>
+    <el-button type="warning" class="agree" :disabled="tabName === '立即签名'" @click="agree"
+      >同意参赛声明</el-button
+    >
     <el-dialog title="电子签名" width="984px" :visible.sync="dialogTableVisible">
       <div>
         <p>请认真签赛您的姓名，否则将影响您的报名参赛资格</p>
@@ -38,11 +40,12 @@
 
 <script>
 import SignaturePad from 'signature_pad'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 export default {
   components: {},
   data() {
     return {
+      loading: true,
       lang: localStorage.getItem('lang'),
       dialogTableVisible: false,
       canvas: '',
@@ -61,6 +64,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('game', ['entryType', 'parentChildId']),
     ...mapGetters('user', ['user', 'sosUser']),
     iconName() {
       return this.tabName === '已签名' ? 'el-icon-check' : ''
@@ -74,8 +78,9 @@ export default {
     agree() {
       this.$apis.game
         .applyGame({
-          activity_id: this.$store.state.game.activityId,
-          entry_type: this.$store.state.game.entryType
+          activity_id: this.$route.params.actId,
+          entry_type: this.entryType,
+          parent_child_id: this.parentChildId
         })
         .then(() => {
           this.$emit('next')
@@ -84,13 +89,15 @@ export default {
     getRules() {
       this.$apis.game
         .getRule({
-          activity_id: this.$store.state.game.activityId,
+          activity_id: this.$route.params.actId,
           type: 3,
           lang: this.lang
         })
         .then(({ data }) => {
-          console.log(data)
           this.rule = data.info.content
+        })
+        .finally(() => {
+          this.loading = false
         })
     },
     dataURLtoFile(dataurl, filename) {
@@ -112,8 +119,8 @@ export default {
       const file = this.dataURLtoFile(data, 'sign.jpeg')
       this.$apis.game
         .uploadElecSign({
-          activity_id: this.$store.state.game.activityId,
-          entry_type: this.$store.state.game.entryType,
+          activity_id: this.$route.params.actId,
+          entry_type: this.entryType,
           file
         })
         .then(() => {
@@ -196,6 +203,7 @@ export default {
       margin-bottom: 14px;
     }
     .content {
+      min-height: 300px;
     }
     .el-form-item {
       margin-top: 30px;

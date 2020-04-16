@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <div class="banner">
-      <img class="avatar" :src="circleUrl" />
+      <img class="avatar" :src="user.headimage" @error="setDefaultImg" />
       <div>
         <div class="name-box">
-          <span class="name">张大发</span>
+          <span class="name">{{ user.truename }}</span>
           <i class="iconfont icon-jifen"></i>
-          <span>积分222</span>
+          <span>积分{{ user.integral }}</span>
         </div>
         <div class="row">
           <span>账户安全：</span>
@@ -14,11 +14,11 @@
         </div>
         <div class="row">
           <span>绑定手机：</span>
-          <span>15088887777</span>
+          <span>{{ user.phone }}</span>
         </div>
         <div class="row">
           <span>绑定邮箱：</span>
-          <span>1211@163.com</span>
+          <span>{{ user.email }}</span>
         </div>
       </div>
     </div>
@@ -66,20 +66,25 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 export default {
   components: {},
   data() {
-    return {
-      circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-    }
+    return {}
   },
   computed: {
-    ...mapState('game', ['applyList', 'cert'])
+    ...mapState('game', ['applyList', 'cert']),
+    ...mapGetters('user', ['user'])
   },
   created() {},
   mounted() {},
-  methods: {}
+  methods: {
+    setDefaultImg() {
+      var img = event.srcElement
+      img.src = 'http://img.la/200x200'
+      img.onerror = null
+    }
+  }
 }
 </script>
 
@@ -100,6 +105,8 @@ export default {
   }
   .avatar {
     width: 136px;
+    height: 136px;
+    border-radius: 100%;
     margin-right: 70px;
     margin-left: 77px;
   }

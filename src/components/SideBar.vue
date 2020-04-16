@@ -1,16 +1,18 @@
 <template>
   <div class="nav-menu">
     <div v-for="(nav, index) in group" :key="index">
-      <p class="title" :class="{ active: currnetTitle === nav.title }">{{ nav.title }}</p>
+      <p class="title" :class="{ active: currnetTitle === nav.title }" @click="goHome(nav)">
+        {{ nav.title }}
+      </p>
       <ul class="muens">
         <li
           class="menu"
-          :class="{ active: currentMenu === menu }"
+          :class="{ active: currentMenu === menu.tabName }"
           v-for="(menu, idx) in nav.menus"
           :key="idx"
           @click="setActive(nav.title, menu)"
         >
-          {{ menu }}
+          {{ menu.tabName }}
         </li>
       </ul>
     </div>
@@ -22,7 +24,7 @@ export default {
   components: {},
   data() {
     return {
-      currnetTitle: '我的比赛',
+      currnetTitle: '',
       currentMenu: '',
       group: []
     }
@@ -35,14 +37,18 @@ export default {
   },
   computed: {},
   created() {
+    console.log(this.$route)
     this.setGroup()
   },
-  mounted() {},
+  mounted() {
+    this.initActivedTab()
+  },
   methods: {
     setActive(title, menu) {
       this.currnetTitle = title
-      this.currentMenu = menu
-      this.$emit('update', menu)
+      this.currentMenu = menu.tabName
+      // this.$emit('update', menu)
+      this.$router.push({ name: menu.linkName })
     },
     setGroup() {
       this.group = [
@@ -52,17 +58,49 @@ export default {
         {
           title: this.$t('user.game'),
           menus: [
-            this.$t('user.apply'),
-            this.$t('user.results'),
-            this.$t('user.certificate'),
-            this.$t('user.photo')
+            { tabName: this.$t('user.apply'), linkName: 'userApply' },
+            { tabName: this.$t('user.results'), linkName: 'results' },
+            { tabName: this.$t('user.certificate'), linkName: 'certificate' },
+            { tabName: this.$t('user.photo'), linkName: 'photo' }
           ]
         },
         {
           title: this.$t('user.account'),
-          menus: [this.$t('user.info'), this.$t('user.integral'), this.$t('user.safe')]
+          menus: [
+            { tabName: this.$t('user.info'), linkName: 'info' },
+            { tabName: this.$t('user.offspring'), linkName: 'info' },
+            { tabName: this.$t('user.integral'), linkName: 'info' },
+            { tabName: this.$t('user.safe'), linkName: 'info' }
+          ]
         }
       ]
+    },
+    goHome(nav) {
+      this.currnetTitle = nav.title
+      if (nav.title === this.$t('header.myMarathon')) {
+        this.currentMenu = ''
+        this.$router.push({ name: 'owner' })
+      } else {
+        this.currentMenu = nav.menus[0].tabName
+        this.$router.push({ name: nav.menus[0].linkName })
+      }
+    },
+    initActivedTab() {
+      if (this.$route.name === 'owner') {
+        this.currnetTitle = this.$t('header.myMarathon')
+        this.currentMenu = ''
+      } else {
+        this.group.some(el => {
+          if (el.menus) {
+            let res = el.menus.find(item => item.linkName === this.$route.name)
+            if (res) {
+              this.currnetTitle = el.title
+              this.currentMenu = res.tabName
+              return true
+            }
+          }
+        })
+      }
     }
   }
 }
@@ -83,6 +121,7 @@ export default {
     color: #2c3e6e;
     padding-left: 15px;
     margin-top: 17px;
+    cursor: pointer;
     &.active {
       background: #f4f4f4;
       position: relative;

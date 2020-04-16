@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 export default {
   components: {},
   data() {
@@ -110,9 +110,13 @@ export default {
       }
     }
   },
-  created() {},
+  created() {
+    this.getApplyDetails({ sign_id: this.$route.params.sId })
+  },
   mounted() {},
-  methods: {}
+  methods: {
+    ...mapActions('game', ['getApplyDetails'])
+  }
 }
 </script>
 

@@ -1,13 +1,13 @@
 <template>
   <div class="apply-step">
     <div class="title">2.请选择赛事项目</div>
-    <div class="apply-content">
+    <div class="apply-content" v-loading="loading">
       <div
         v-for="item in list"
         :key="item.type"
         class="grid"
         :class="{ active: active === item.type }"
-        @click="selectCard(item.type)"
+        @click="selectCard(item)"
       >
         <p class="card-title">{{ item.title }}</p>
         <span class="sub">2019上海国际{{ item.title }}</span>
@@ -30,7 +30,7 @@
       </div>
       <div v-for="i in 4" :key="i.id" class="grid"></div>
     </div>
-    <el-button type="warning" @click="submit">已选项目，下一步</el-button>
+    <el-button :disabled="!active" type="warning" @click="submit">已选项目，下一步</el-button>
   </div>
 </template>
 
@@ -39,36 +39,47 @@ export default {
   components: {},
   data() {
     return {
-      active: false,
-      list: [],
-      activityId: 2
+      loading: true,
+      active: '',
+      list: []
     }
   },
-  computed: {},
-  created() {
-    this.$apis.game.getActivity({ activity_id: this.activityId }).then(({ data }) => {
-      console.log(data)
-      this.list = data.items.map(e => {
-        return {
-          title: e.entry_name,
-          type: e.entry_type,
-          price: e.entry_price + '/人'
-        }
-      })
-    })
+  computed: {
+    activityId() {
+      return this.$route.params.actId
+    }
   },
-  mounted() {},
+  created() {
+    this.$apis.game
+      .getActivity({ activity_id: this.activityId })
+      .then(({ data }) => {
+        console.log(data)
+        this.list = data.items.map(e => {
+          return {
+            title: e.entry_name,
+            type: e.entry_type,
+            price: e.entry_price + '/人',
+            number: e.parent_number
+          }
+        })
+      })
+      .finally(() => {
+        this.loading = false
+      })
+  },
+  mounted() {
+    console.log(this.$route)
+  },
   methods: {
-    selectCard(index) {
-      this.active = index
-      console.log(this.$store)
+    selectCard(item) {
+      this.active = item.type
+      this.$store.commit('game/SET_MAXNUMBER', item.number)
     },
     submit() {
       this.$apis.game
         .applyValidate({
           activity_id: this.activityId,
           entry_type: this.active
-          // parent_child_id
         })
         .then(() => {
           this.$store.commit('game/SET_ENTRYTYPE', this.active)
@@ -100,6 +111,7 @@ export default {
     margin: 30px auto;
   }
   .apply-content {
+    min-height: 300px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -146,8 +158,8 @@ export default {
     color: #2c3e6e;
     font-size: 14px;
     position: absolute;
-    right: 30px;
-    top: 40px;
+    right: 25px;
+    top: 25px;
   }
   .el-icon-success {
     position: absolute;

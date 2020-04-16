@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer" :class="$i18n.locale">
+  <footer ref="footer" class="footer" :class="$i18n.locale" :style="{ background: bgColor }">
     <div class="inner-footer">
       <div>
         <p class="row">{{ $t('footer.instructions') }}</p>
@@ -26,19 +26,46 @@
         <span>{{ $t('footer.app') }}</span>
       </div>
     </div>
+    <div
+      v-if="showScrollTop"
+      class="back-top-btn"
+      :style="{ background: bgColor }"
+      @click="scrollTop"
+    >
+      <i class="iconfont icon-back-top"></i>
+    </div>
   </footer>
 </template>
 
 <script>
 export default {
   components: {},
+  props: {
+    bgColor: {
+      type: String,
+      default: '#343e68'
+    }
+  },
   data() {
-    return {}
+    return {
+      showScrollTop: false
+    }
   },
   computed: {},
   created() {},
-  mounted() {},
-  methods: {}
+  mounted() {
+    setTimeout(() => {
+      this.showScrollTop = this.$parent.$el.offsetHeight > document.body.clientHeight
+    }, 1000)
+  },
+  methods: {
+    scrollTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
+    }
+  }
 }
 </script>
 
@@ -46,10 +73,10 @@ export default {
 .footer {
   width: 100%;
   height: 250px;
-  background: #343e68;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   &.zh-CN {
     .td {
       width: 56px;
@@ -85,6 +112,24 @@ export default {
         height: 100px;
         margin-bottom: 10px;
       }
+    }
+  }
+  .back-top-btn {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+    top: -50px;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+    .icon-back-top {
+      font-size: 26px;
+      color: #ffffff;
     }
   }
 }

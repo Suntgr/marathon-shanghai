@@ -1,11 +1,11 @@
 <template>
   <div class="apply-step">
     <div class="apply-title">1.请阅读竞赛规程</div>
-    <div class="apply-content">
+    <div v-loading="loading" class="apply-content">
       <!-- <div class="content-title">2019上海国际马拉松赛竞赛规程</div> -->
       <div class="content" v-html="rule">xxxxx</div>
     </div>
-    <el-button type="warning" @click="$emit('next')">已阅读竞赛规程，下一步</el-button>
+    <el-button type="warning" @click="next">已阅读竞赛规程，下一步</el-button>
   </div>
 </template>
 
@@ -14,11 +14,16 @@ export default {
   components: {},
   data() {
     return {
+      loading: true,
       lang: localStorage.getItem('lang'),
       rule: ''
     }
   },
-  computed: {},
+  computed: {
+    activityId() {
+      return this.$route.params.actId
+    }
+  },
   watch: {
     '$i18n.locale'() {
       this.getRules()
@@ -32,13 +37,24 @@ export default {
     getRules() {
       this.$apis.game
         .getRule({
-          activity_id: 1,
+          activity_id: this.activityId,
           type: 1,
           lang: this.lang
         })
         .then(({ data }) => {
-          console.log(data)
           this.rule = data.info.content
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    },
+    next() {
+      this.$apis.game
+        .applyValidate({
+          activity_id: this.activityId
+        })
+        .then(() => {
+          this.$emit('next')
         })
     }
   }
@@ -57,6 +73,7 @@ export default {
     padding-left: 11px;
   }
   .apply-content {
+    min-height: 300px;
     margin-top: 16px;
     border-radius: 3px;
     border: 1px solid rgba(216, 221, 230, 1);

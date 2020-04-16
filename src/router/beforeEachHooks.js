@@ -6,7 +6,6 @@
  */
 
 import Vue from 'vue'
-import { $auth } from '@helper'
 
 export default {
   // Check the login status
@@ -18,7 +17,7 @@ export default {
     if (to.meta && to.meta.ignoreAuth) {
       next()
     } else {
-      if ($auth.checkSession()) {
+      if (sessionStorage.getItem('token')) {
         next()
       } else {
         next({ path: '/login' })

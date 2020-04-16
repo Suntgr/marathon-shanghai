@@ -22,7 +22,7 @@
           ></el-input>
         </el-form-item>
         <div class="submit-btn">
-          <el-button type="primary" @click="submitForm('ruleForm')">{{
+          <el-button :loading="logining" type="primary" @click="submitForm('ruleForm')">{{
             $t('login.login')
           }}</el-button>
           <el-button round @click="signUp">{{ $t('login.sign') }}</el-button>
@@ -76,7 +76,8 @@ export default {
       rules: {
         account: [{ validator: validateAccount, trigger: 'blur' }],
         password: [{ validator: validatePass, trigger: 'blur' }]
-      }
+      },
+      logining: false
     }
   },
   computed: {},
@@ -96,6 +97,7 @@ export default {
       this.$router.push('sign')
     },
     login() {
+      this.logining = true
       this.$apis.user
         .login({
           username: this.ruleForm['account'],
@@ -104,7 +106,10 @@ export default {
         .then(({ data }) => {
           console.log(data)
           sessionStorage.setItem('token', data.token)
-          this.$router.push('apply')
+          this.$router.push('/dashboard')
+        })
+        .finally(() => {
+          this.logining = false
         })
     },
     submitForm(formName) {

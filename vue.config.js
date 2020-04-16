@@ -1,11 +1,9 @@
 /* eslint-disable prettier/prettier */
 /**
  * /* eslint-disable no-unused-vars
- *
+ *  https://vue-cli3.lovejade.cn/?utm_source=awesome-vue-cli3-example
  * @format
  */
-
-/** @format */
 
 const path = require('path')
 const fs = require('fs')
@@ -35,7 +33,7 @@ module.exports = {
   // sub-path here. For example, if your app is deployed at
   // https://www.foobar.com/my-app/
   // then change this to '/my-app/'
-  publicPath: '/',
+  publicPath: './',
 
   // where to output built files
   outputDir: 'dist',
@@ -164,12 +162,12 @@ module.exports = {
     hotOnly: false,
     // See https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#configuring-proxy
     proxy: {
-      '/app': {
+      '/api': {
         target: 'http://161.189.58.24',
         ws: true,
         changeOrigin: true,
         pathRewrite: {
-          '^/app': ''
+          '^/api': 'api'
         }
       }
     },

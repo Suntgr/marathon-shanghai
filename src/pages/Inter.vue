@@ -4,7 +4,7 @@ eslint-disable vue/no-parsing-error */ /* eslint-disable */
 <!-- @format -->
 <template>
   <div>
-    <div class="header">
+    <!-- <div class="header">
       <el-row>
         <el-col :span="2"><div class="grid-content "></div></el-col>
         <el-col :span="20">
@@ -79,7 +79,9 @@ eslint-disable vue/no-parsing-error */ /* eslint-disable */
         >
         <el-col :span="2"><div class="grid-content"></div></el-col>
       </el-row>
-    </div>
+    </div> -->
+    <t-header></t-header>
+    <t-nav></t-nav>
     <div class="banner">
       <img src="../assets/images/inter/banner.png" alt="" />
     </div>
@@ -92,7 +94,7 @@ eslint-disable vue/no-parsing-error */ /* eslint-disable */
           <div>
             <p><span>1</span> 天 <span>2</span> 时 <span>3 </span> 分 <span>4</span> 秒</p>
           </div>
-          <div class="rightNow"><a href="">立即报名</a></div>
+          <div class="rightNow"><a @click="goPage">立即报名</a></div>
         </div>
 
         <div class="down">
@@ -200,7 +202,7 @@ eslint-disable vue/no-parsing-error */ /* eslint-disable */
     <div class="shangbiao">
       <img src="../assets/images/inter/shangbiao.png" alt="" />
     </div>
-    <div class="footer">
+    <!-- <div class="footer">
       <div class="f1">
         <p>上海国际马拉松赛、上马系列赛、上马俱乐部由上海东浩兰生赛事管理有限公司独家运营承办。</p>
         <p>咨询电话: 021-965365</p>
@@ -212,11 +214,16 @@ eslint-disable vue/no-parsing-error */ /* eslint-disable */
       <div class="f2">
         二维码
       </div>
-    </div>
+    </div> -->
+    <t-footer></t-footer>
   </div>
 </template>
 <script>
+import THeader from '@/components/header.vue'
+import TFooter from '@/components/footer.vue'
+import TNav from '@/components/nav.vue'
 export default {
+  components: { THeader, TFooter, TNav },
   data() {
     return {
       options: [
@@ -230,6 +237,9 @@ export default {
     }
   },
   methods: {
+    goPage() {
+      this.$router.push({ name: 'apply', params: { actId: this.$route.params.actId } })
+    },
     handleSelect() {}
   }
 }

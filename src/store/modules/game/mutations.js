@@ -18,5 +18,17 @@ export default {
   },
   ['SET_ACTIVEDPHOTO'](state, value) {
     state.activedPhoto = value
+  },
+  ['SET_ACTIVETYLIST'](state, value) {
+    state.activetyList = value
+  },
+  ['SET_MAXNUMBER'](state, value) {
+    state.maxChildrenNumber = value
+  },
+  ['SET_PARENTCHILDID'](state, value) {
+    state.parentChildId = value
+  },
+  ['SET_ACTIVITYID'](state, value) {
+    state.activityId = value
   }
 }

@@ -3,24 +3,27 @@
     <t-header></t-header>
     <div class="logo-box">
       <div class="inner-box">
-        <img class="sm-logo" src="@/assets/images/sm-logo.png" />
+        <img class="sm-logo" @click="goHome" src="@/assets/images/sm-logo.png" />
       </div>
     </div>
     <div class="main">
       <div class="inner-main">
         <el-breadcrumb class="nav-bread" separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/' }">{{ $t('user.homePage') }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ name: 'marathon' }">{{
+            $t('user.homePage')
+          }}</el-breadcrumb-item>
           <el-breadcrumb-item>{{ $t('header.myMarathon') }}</el-breadcrumb-item>
           <el-breadcrumb-item v-if="currentMenu">{{ currentMenu }}</el-breadcrumb-item>
           <el-breadcrumb-item v-if="nextMenu">{{ nextMenu }}</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="menu-content">
           <t-side-bar @update="setMenu"></t-side-bar>
-          <component
+          <!-- <component
             :is="currentTabComponent"
             @details="handleDetails"
             @photo="morePhoto"
-          ></component>
+          ></component> -->
+          <router-view></router-view>
         </div>
       </div>
     </div>
@@ -32,28 +35,28 @@
 import THeader from '@/components/header.vue'
 import TFooter from '@/components/footer.vue'
 import TSideBar from '@/components/SideBar.vue'
-import TGame from '@/components/userTabContainer/game.vue'
-import TApply from '@/components/userTabContainer/apply.vue'
-import TDetail from '@/components/userTabContainer/details.vue'
-import TRanking from '@/components/userTabContainer/ranking.vue'
-import TCert from '@/components/userTabContainer/certificate.vue'
-import TPhoto from '@/components/userTabContainer/photo.vue'
-import TPhotoMore from '@/components/userTabContainer/morePhoto.vue'
-import TUserCenter from '@/components/userTabContainer/userCenter.vue'
+// import TGame from '@/components/userTabContainer/game.vue'
+// import TApply from '@/components/userTabContainer/apply.vue'
+// import TDetail from '@/components/userTabContainer/details.vue'
+// import TRanking from '@/components/userTabContainer/ranking.vue'
+// import TCert from '@/components/userTabContainer/certificate.vue'
+// import TPhoto from '@/components/userTabContainer/photo.vue'
+// import TPhotoMore from '@/components/userTabContainer/morePhoto.vue'
+// import TUserCenter from '@/components/userTabContainer/userCenter.vue'
 import { mapActions } from 'vuex'
 export default {
   components: {
     THeader,
     TFooter,
-    TSideBar,
-    TGame,
-    TApply,
-    TDetail,
-    TRanking,
-    TCert,
-    TPhoto,
-    TPhotoMore,
-    TUserCenter
+    TSideBar
+    // TGame,
+    // TApply,
+    // TDetail,
+    // TRanking,
+    // TCert,
+    // TPhoto,
+    // TPhotoMore,
+    // TUserCenter
   },
   data() {
     return {
@@ -100,6 +103,7 @@ export default {
   created() {
     this.getApplyList()
     this.getCertificate()
+    console.log(21, this.$route)
   },
   mounted() {},
   methods: {
@@ -118,6 +122,9 @@ export default {
     },
     morePhoto() {
       this.photoDetails = true
+    },
+    goHome() {
+      this.$router.push({ name: 'marathon' })
     }
   }
 }
@@ -140,6 +147,7 @@ export default {
     .sm-logo {
       width: 515px;
       margin-left: -63px;
+      cursor: pointer;
     }
   }
   .main {

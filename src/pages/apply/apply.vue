@@ -10,12 +10,13 @@
             <el-breadcrumb-item>我的报名</el-breadcrumb-item>
           </el-breadcrumb>
           <el-steps
-            v-if="activeStep === 1"
+            v-if="activeStep < 6"
             class="steps"
             :space="200"
-            :active="0"
+            :active="activeStep - 1"
             finish-status="success"
           >
+            <el-step></el-step>
             <el-step></el-step>
             <el-step></el-step>
             <el-step></el-step>

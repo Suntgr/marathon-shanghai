@@ -112,7 +112,7 @@ export default {
         msgCode: [{ validator: validatePassCode, trigger: 'blur' }],
         isAgree: [{ validator: validateAgree, trigger: 'blur' }]
       },
-      picCode: '/app/api/verification-code/captcha',
+      picCode: '/api/verification-code/captcha',
       countdown: 0
     }
   },
@@ -155,7 +155,7 @@ export default {
       })
     },
     changePicCode() {
-      this.picCode = `/app/api/verification-code/captcha?${Date.now()}`
+      this.picCode = `/api/verification-code/captcha?${Date.now()}`
     },
     setCountdown() {
       this.countdown = 60

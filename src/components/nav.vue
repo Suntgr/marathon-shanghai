@@ -1,7 +1,7 @@
 <template>
   <div class="nav-box">
     <div class="inner-box">
-      <img class="sm-logo" src="@/assets/images/sm-logo.png" />
+      <img class="sm-logo" @click="goHome" src="@/assets/images/sm-logo.png" />
       <ul class="nav">
         <li
           v-for="(menu, index) in menus"
@@ -10,6 +10,7 @@
           :class="{ active: activeMenu.name === menu.name }"
           @mouseover="openMenu(menu)"
           @mouseleave="waitClose"
+          @click="navGo(menu)"
         >
           {{ menu.name }}
         </li>
@@ -29,11 +30,17 @@
               :class="{ active: activeName === tab.name }"
               @mouseover="openMiniTab(tab)"
               @mouseleave="closeMiniTab(tab)"
+              @click="navGo(tab)"
             >
               <span class="inner-tab">{{ tab.name }}</span>
               <i class="iconfont" :class="!!tab.children ? 'icon-ziyuan' : 'icon-changjiantou'"></i>
               <ul class="mini-tabs" v-if="showMiniTabs">
-                <li class="mini-tab" v-for="(item, idx) in tab.children" :key="idx">
+                <li
+                  class="mini-tab"
+                  v-for="(item, idx) in tab.children"
+                  @click.stop="navGo(item)"
+                  :key="idx"
+                >
                   {{ item.name }}
                 </li>
               </ul>
@@ -52,12 +59,12 @@ export default {
     return {
       showPopup: false,
       menus: [
-        { name: '首页' },
+        { name: '首页', linkName: 'inter' },
         {
           name: '我要报名',
           children: [
             { name: '竞赛规则' },
-            { name: '立即报名' },
+            { name: '立即报名', linkName: 'apply' },
             { name: '报名须知' },
             { name: '报名查询' },
             { name: '上马训练营' }
@@ -67,36 +74,55 @@ export default {
           name: '赛事信息',
           children: [
             { name: '赛事新闻' },
-            { name: '赛事照片' },
+            { name: '赛事照片', linkName: 'game', tabId: 8 },
             { name: '赛事公告' },
-            { name: '赛事排行榜' },
+            { name: '赛事排行榜', linkName: 'game', tabId: 9 },
             {
               name: '赛事周',
               children: [
                 { name: '装备领取' },
-                { name: '赛事路线图' },
-                { name: '赛事起点' },
-                { name: '赛事终点' }
+                { name: '赛事路线图', linkName: 'game', tabId: 5 },
+                { name: '赛事起点', linkName: 'game', tabId: 6 },
+                { name: '赛事终点', linkName: 'game', tabId: 7 }
               ]
             }
           ]
         },
         { name: '志愿者' },
         { name: '上马商城' },
-        { name: '赞助商' }
+        { name: '赞助商', linkName: 'sponsor' }
       ],
       tabs: [],
       showMiniTabs: false,
       timer: null,
       activeName: '',
-      activeMenu: '',
+      activeMenu: {},
       timer1: null
     }
   },
   computed: {},
   created() {},
-  mounted() {},
+  mounted() {
+    this.initActiveMenu()
+  },
   methods: {
+    initActiveMenu() {
+      let item = this.menus.find(el => el.linkName === this.$route.name)
+      if (item) {
+        this.activeMenu = item ? item : ''
+      } else {
+        this.menus.some(el => {
+          if (el.children) {
+            let res = el.children.find(e => e.linkName === this.$route.name)
+            if (res) {
+              this.activeMenu = el
+              this.activeName = res.name
+              return true
+            }
+          }
+        })
+      }
+    },
     openMenu(menu) {
       if (menu.children) {
         this.tabs = menu.children
@@ -110,12 +136,12 @@ export default {
     waitClose() {
       this.timer = setTimeout(() => {
         this.showPopup = false
-        this.activeMenu = ''
+        this.initActiveMenu()
       }, 300)
     },
     closeMenu() {
       this.showPopup = false
-      this.activeMenu = ''
+      this.initActiveMenu()
     },
     openMiniTab(tab) {
       this.activeName = tab.name
@@ -136,6 +162,20 @@ export default {
         this.showMiniTabs = false
         this.activeName = ''
       }
+    },
+    navGo(item) {
+      if (item.linkName) {
+        if (this.$route.name !== item.linkName) {
+          this.$router.push({ name: item.linkName })
+        }
+        if (item.tabId) {
+          sessionStorage.setItem('tabId', item.tabId)
+          this.$emit('update', item.tabId)
+        }
+      }
+    },
+    goHome() {
+      this.$router.push({ name: 'marathon' })
     }
   }
 }
@@ -157,6 +197,7 @@ export default {
     .sm-logo {
       width: 515px;
       margin-left: -63px;
+      cursor: pointer;
     }
   }
   .nav {
@@ -168,6 +209,7 @@ export default {
       padding: 10px 0;
       border-top: 3px solid transparent;
       border-bottom: 3px solid transparent;
+      user-select: none;
       &.active {
         color: #e2bd6f;
         border-bottom: 3px solid;
@@ -182,7 +224,7 @@ export default {
     padding: 0 30px;
     height: 242px;
     background: linear-gradient(90deg, rgba(12, 36, 82, 1) 0%, rgba(51, 82, 138, 1) 100%);
-    opacity: 0.8;
+    opacity: 0.95;
     .inner-popup {
       max-width: 1400px;
       height: 100%;

@@ -1,6 +1,6 @@
 <template>
   <div class="ranking">
-    <el-table :data="tableData" empty-text="--">
+    <el-table :data="tableData" empty-text="暂无数据">
       <el-table-column :label="$t('user.tableEvent')" width="274px" fixed prop="event">
       </el-table-column>
       <el-table-column :label="$t('user.tableProject')" prop="project"></el-table-column>
@@ -43,7 +43,16 @@ export default {
   data() {
     return {
       headRowStyle: { background: '#FAFAFA', color: '#2C3E6E' },
-      tableData: null,
+      tableData: [
+        // {
+        //   event: '2019年上海国际半程马拉松赛',
+        //   project: '男子半程马拉松',
+        //   number: 'GB39230',
+        //   score: '03:23:09',
+        //   ranking: '88',
+        //   id: 1
+        // }
+      ],
       scoreData: [
         { mileage: '5km', consuming: '03:23:47' },
         { mileage: '5km', consuming: '03:23:47' },
@@ -57,7 +66,6 @@ export default {
   computed: {},
   created() {
     this.$apis.game.getScoreList({ page: 1, page_size: '100' }).then(({ data }) => {
-      data.list = [{}]
       this.tableData = data.list.map(el => {
         return {
           event: el.activity_name || '2019年上海国际半程马拉松赛',

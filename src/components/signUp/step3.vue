@@ -175,7 +175,9 @@
     </div>
     <p class="tip">{{ $t('login.note') }}</p>
     <div class="sign-btns">
-      <el-button type="primary" @click="submitForm('ruleForm')">{{ $t('login.sign') }}</el-button>
+      <el-button :loading="signing" type="primary" @click="submitForm('ruleForm')">{{
+        $t('login.sign')
+      }}</el-button>
       <el-button class="blue-btn">{{ $t('login.wait') }}</el-button>
     </div>
   </el-form>
@@ -209,6 +211,7 @@ export default {
     }
     return {
       addressOptions,
+      signing: false,
       idType: 0,
       countries: [],
       ruleForm: {
@@ -308,6 +311,7 @@ export default {
       document.querySelector('.birthday .el-input__icon').innerText = this.$t('login.birthday')
     },
     postInfo() {
+      this.signing = true
       let email, phone
       if (+this.user.phoneOrEmail) {
         email = this.ruleForm.userEmail
@@ -342,9 +346,13 @@ export default {
           area_id: this.ruleForm.otherAddress[2],
           address: this.ruleForm.detailedAddress2
         })
-      ]).then(() => {
-        this.$emit('next')
-      })
+      ])
+        .then(() => {
+          this.$emit('next')
+        })
+        .finally(() => {
+          this.signing = false
+        })
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
